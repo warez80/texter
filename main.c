@@ -74,8 +74,8 @@ int main() {
 	int i, j;
 	char out;
 
-	struct inventory;
-	inventory.size = 0;
+	struct inventory playerInventory;
+	playerInventory.size = 0;
 
 	int map[MAP_WIDTH][MAP_HEIGHT];
 
@@ -277,32 +277,32 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 
 }
 
-int hasItem(struct item inventory[], char itemName[])
+int hasItem(struct inventory playerInventory, char itemName[])
 {
-    int i, size = inventory.size;
+    int i, size = playerInventory.size;
     for(i = 0; i < size; i++)
     {
-        if(strcmp(inventory.items[i].name, itemName) == 0)
+        if(strcmp(playerInventory.items[i].name, itemName) == 0)
         {
-            return inventory.items[i].quantity;
+            return playerInventory.items[i].quantity;
         }
     }
 
-    return inventory[i].quantity;
+    return playerInventory.items[i].quantity;
 }
 
-void addItem(struct item inventory[], char itemName[], int quantity)
+void addItem(struct inventory playerInventory, char itemName[], int quantity)
 {
-    int i, size = inventory.size;
+    int i, size = playerInventory.size;
     for(i = 0; i < size; i++)
     {
-        if(strcmp(inventory.items[i].name, itemName) == 0)
+        if(strcmp(playerInventory.items[i].name, itemName) == 0)
         {
-            inventory.items[i].quantity += quantity;
+            playerInventory.items[i].quantity += quantity;
             return;
         }
     }
-    strcpy(inventory.items[size].name, itemName);
-    inventory.items[size].quantity = quantity;
-    inventory.size += 1;
+    strcpy(playerInventory.items[size].name, itemName);
+    playerInventory.items[size].quantity = quantity;
+    playerInventory.size += 1;
 }
