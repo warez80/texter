@@ -60,6 +60,11 @@ struct inventory {
     int size;
 };
 
+struct map {
+    struct map maps[25];
+    char desc[200];
+};
+
 void fill_map(int map[][MAP_HEIGHT]);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY);
 int hasItem(struct inventory, char itemName[]);
@@ -90,8 +95,6 @@ int main() {
 	planeX = 0;
 	planeY = 0.66;
 
-	int cardinalDir = 3;
-
 	while (1) {
 		render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
 
@@ -111,9 +114,6 @@ int main() {
 			oldPlaneX = planeX;
 			planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
 			planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
-
-			cardinalDir++;
-			cardinalDir %= 4;
 		} else if (strcmp(input, "l") == 0) {
 			oldDirX = dirX;
 			dirX = dirX * cos(ROTSPEED) - dirY * sin(ROTSPEED);
@@ -121,9 +121,6 @@ int main() {
 			oldPlaneX = planeX;
 			planeX = planeX * cos(ROTSPEED) - planeY * sin(ROTSPEED);
 			planeY = oldPlaneX * sin(ROTSPEED) + planeY * cos(ROTSPEED);
-
-			cardinalDir--;
-			cardinalDir %= 4;
 		} else if (strcmp(input, "m") == 0) {
 			char dummy[255];
 			// render out a map
@@ -134,12 +131,7 @@ int main() {
 						case 1: out = '#'; break;
 					}
 					if (((int) posX) == i && ((int) posY) == j) {
-						switch (cardinalDir) {
-							case 0: out = '^'; break;
-							case 1: out = '>'; break;
-							case 2: out = 'v'; break;
-							case 3: out = '<'; break;
-						}
+						out = 'P';
 					}
 					printf("%c", out);
 				}
