@@ -78,6 +78,7 @@ int main() {
 	int waste;
 	int i, j;
 	char out;
+	int cardinalDir;
 
 	struct inventory playerInventory;
 	playerInventory.size = 0;
@@ -101,6 +102,8 @@ int main() {
 	printf("(type h to for a list of commands)\n");
 	scanf("%s", input);
 
+	cardinalDir = 3;
+
 	while (1) {
 		
 		render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
@@ -122,6 +125,9 @@ int main() {
 			oldPlaneX = planeX;
 			planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
 			planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
+
+			cardinalDir++;
+			cardinalDir %= 4;
 		} else if (strcmp(input, "l") == 0) {
 			// rotate left
 			oldDirX = dirX;
@@ -130,6 +136,9 @@ int main() {
 			oldPlaneX = planeX;
 			planeX = planeX * cos(ROTSPEED) - planeY * sin(ROTSPEED);
 			planeY = oldPlaneX * sin(ROTSPEED) + planeY * cos(ROTSPEED);
+
+			cardinalDir--;
+			cardinalDir %= 4;
 		} else if (strcmp(input, "m") == 0) {
 			char dummy[255];
 			// render out a map
@@ -140,7 +149,12 @@ int main() {
 						case 1: out = '#'; break;
 					}
 					if (((int) posX) == i && ((int) posY) == j) {
-						out = 'P';
+						switch (cardinalDir) {
+							case 0: out = '^'; break;
+							case 1: out = '>'; break;
+							case 2: out = 'v'; break;
+							case 3: out = '<'; break;
+						}
 					}
 					printf("%c", out);
 				}
