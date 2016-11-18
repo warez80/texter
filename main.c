@@ -48,8 +48,22 @@ void sleep_ms(int milliseconds) {
 #define ROTSPEED 1.57079632679
 #define MOVESPEED 1
 
+#define MAXINVENTORY 50
+
+struct item {
+    char name[50];
+    int quantity;
+};
+
+struct inventory {
+    struct item items[MAXINVENTORY];
+    int size;
+};
+
 void fill_map(int map[][MAP_HEIGHT]);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY);
+int hasItem(struct inventory, char itemName[]);
+void addItem(struct inventory, char itemName[], int quantity);
 
 int main() {
 	calculateScreenSize();
@@ -59,6 +73,9 @@ int main() {
 	int waste;
 	int i, j;
 	char out;
+
+	struct item inventory[MAXINVENTORY];
+	inventory.size = 0;
 
 	int map[MAP_WIDTH][MAP_HEIGHT];
 
@@ -127,7 +144,7 @@ int main() {
 				planeY = oldPlaneX * sin(-PI / 18) + planeY * cos(-PI / 18);
 
 				render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
-				
+
 				sleep_ms(100);
 			}
 
@@ -258,4 +275,33 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 		printf("\n");
 	}
 
+}
+
+int hasItem(struct item inventory[], char itemName[])
+{
+    int i, size = inventory.size;
+    for(i = 0; i < size; i++)
+    {
+        if(strcmp(inventory.items[i].name, itemName) == 0)
+        {
+            return inventory.items[i].quantity;
+        }
+    }
+
+    return inventory[i].quantity;
+}
+
+void addItem(struct item inventory[], char itemName[], int quantity)
+{
+    int i, size = inventory.size;
+    for(i = 0; i < size; i++)
+    {
+        if(strcmp(inventory.items[i].name, itemName) == 0)
+        {
+            inventory.items[i].quantity += quantity;
+            return;
+        }
+    }
+    strcpy(inventory.items[size].name, itemName);
+    inventory.items[size].quantity = quantity;
 }
