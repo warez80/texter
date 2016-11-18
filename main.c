@@ -78,6 +78,7 @@ int main() {
 	int waste;
 	int i, j;
 	char out;
+	int cardinalDir;
 
 	struct inventory playerInventory;
 	playerInventory.size = 0;
@@ -101,6 +102,8 @@ int main() {
 	printf("(type h to for a list of commands)\n");
 	scanf("%s", input);
     int mapMode = 0;
+
+	cardinalDir = 3;
 
 	while (1) {
 
@@ -129,6 +132,7 @@ int main() {
 		if (strcmp(input, "quit") == 0) {
 			break;
 		} else if (strcmp(input, "f") == 0) {
+			// forward
 			if (map[(int) (posX + dirX * MOVESPEED)][(int) posY] == 0) posX += dirX * MOVESPEED;
 			if (map[(int) posX][(int) (posY + dirY * MOVESPEED)] == 0) posY += dirY * MOVESPEED;
 		} else if (strcmp(input, "r") == 0) {
@@ -139,13 +143,20 @@ int main() {
 			oldPlaneX = planeX;
 			planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
 			planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
+
+			cardinalDir++;
+			cardinalDir %= 4;
 		} else if (strcmp(input, "l") == 0) {
+			// rotate left
 			oldDirX = dirX;
 			dirX = dirX * cos(ROTSPEED) - dirY * sin(ROTSPEED);
 			dirY = oldDirX * sin(ROTSPEED) + dirY * cos(ROTSPEED);
 			oldPlaneX = planeX;
 			planeX = planeX * cos(ROTSPEED) - planeY * sin(ROTSPEED);
 			planeY = oldPlaneX * sin(ROTSPEED) + planeY * cos(ROTSPEED);
+
+			cardinalDir--;
+			cardinalDir %= 4;
 		} else if (strcmp(input, "m") == 0) {
 			char mapchoice[255];
 			// render out a map
@@ -156,7 +167,12 @@ int main() {
 						case 1: out = '#'; break;
 					}
 					if (((int) posX) == i && ((int) posY) == j) {
-						out = 'P';
+						switch (cardinalDir) {
+							case 0: out = '^'; break;
+							case 1: out = '>'; break;
+							case 2: out = 'v'; break;
+							case 3: out = '<'; break;
+						}
 					}
 					printf("%c", out);
 				}
@@ -169,6 +185,7 @@ int main() {
                 mapMode = 1;
             }
 		} else if (strcmp(input, "g") == 0) {
+			// pan around the room
 			for (i = 0; i < 36; ++i) {
 				oldDirX = dirX;
 				dirX = dirX * cos(-PI / 18) - dirY * sin(-PI / 18);
@@ -220,6 +237,7 @@ void fill_map(int map[][MAP_HEIGHT]) {
 }
 
 
+// renders out some Wolfenstein-style raycasting
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY) {
 	int x, i, j;
 	char buffer[SCREEN_WIDTH][SCREEN_HEIGHT];
@@ -313,13 +331,10 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 
 }
 
-int hasItem(struct inventory playerInventory, char itemName[])
-{
+int hasItem(struct inventory playerInventory, char itemName[]) {
     int i, size = playerInventory.size;
-    for(i = 0; i < size; i++)
-    {
-        if(strcmp(playerInventory.items[i].name, itemName) == 0)
-        {
+    for(i = 0; i < size; i++) {
+        if(strcmp(playerInventory.items[i].name, itemName) == 0) {
             return playerInventory.items[i].quantity;
         }
     }
@@ -327,13 +342,10 @@ int hasItem(struct inventory playerInventory, char itemName[])
     return 0;
 }
 
-void addItem(struct inventory playerInventory, char itemName[], int quantity)
-{
+void addItem(struct inventory playerInventory, char itemName[], int quantity) {
     int i, size = playerInventory.size;
-    for(i = 0; i < size; i++)
-    {
-        if(strcmp(playerInventory.items[i].name, itemName) == 0)
-        {
+    for(i = 0; i < size; i++) {
+        if(strcmp(playerInventory.items[i].name, itemName) == 0) {
             playerInventory.items[i].quantity += quantity;
             return;
         }
