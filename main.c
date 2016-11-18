@@ -66,6 +66,7 @@ struct room {
 };
 
 void fill_map(int map[][MAP_HEIGHT]);
+void render_map(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY);
 int hasItem(struct inventory, char itemName[]);
 void addItem(struct inventory, char itemName[], int quantity);
@@ -111,19 +112,7 @@ int main() {
         {
             render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
         } else if(mapMode == 1) {
-            for (j = 0; j < MAP_HEIGHT; ++j) {
-				for (i = 0; i < MAP_WIDTH; ++i) {
-					switch (map[i][j]) {
-						case 0: out = ' '; break;
-						case 1: out = '#'; break;
-					}
-					if (((int) posX) == i && ((int) posY) == j) {
-						out = 'P';
-					}
-					printf("%c", out);
-				}
-				printf("\n");
-			}
+			render_map(map, posX, posY, dirX, dirY);
         }
 
 		printf("w-what now senpai?\n");
@@ -160,29 +149,16 @@ int main() {
 		} else if (strcmp(input, "m") == 0) {
 			char mapchoice[255];
 			// render out a map
-			for (j = 0; j < MAP_HEIGHT; ++j) {
-				for (i = 0; i < MAP_WIDTH; ++i) {
-					switch (map[i][j]) {
-						case 0: out = ' '; break;
-						case 1: out = '#'; break;
-					}
-					if (((int) posX) == i && ((int) posY) == j) {
-						switch (cardinalDir) {
-							case 0: out = '^'; break;
-							case 1: out = '>'; break;
-							case 2: out = 'v'; break;
-							case 3: out = '<'; break;
-						}
-					}
-					printf("%c", out);
-				}
-				printf("\n");
-			}
-            printf("return to first person(y/n)? ");
+			render_map(map, posX, posY, dirX, dirY);
+
+			// ask user to return to view mode
+            printf("return to view mode(y/n)? ");
 			scanf("%s", mapchoice);
 			if(strcmp(mapchoice, "n") == 0)
             {
                 mapMode = 1;
+            } else {
+				mapMode = 0;
             }
 		} else if (strcmp(input, "g") == 0) {
 			// pan around the room
@@ -200,7 +176,7 @@ int main() {
 			}
 
 		} else if (strcmp(input, "v") == 0) {
-            mapMode = 0;
+			mapMode = 0;
 		} else if (strcmp(input, "h") == 0) {
             printf("COMMANDS");
             printf("f: move forward");
@@ -242,6 +218,23 @@ void fill_map(int map[][MAP_HEIGHT]) {
 	}
 }
 
+void render_map(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY) {
+	int i, j;
+	char out;
+	for (j = 0; j < MAP_HEIGHT; ++j) {
+		for (i = 0; i < MAP_WIDTH; ++i) {
+			switch (map[i][j]) {
+				case 0: out = ' '; break;
+				case 1: out = '#'; break;
+			}
+			if (((int) posX) == i && ((int) posY) == j) {
+				out = 'P';
+			}
+			printf("%c", out);
+		}
+		printf("\n");
+	}
+}
 
 // renders out some Wolfenstein-style raycasting
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY) {
