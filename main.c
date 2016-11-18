@@ -72,12 +72,6 @@ void addItem(struct inventory, char itemName[], int quantity);
 
 int main() {
 	calculateScreenSize();
-	
-	render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
-	
-	printf("You wake up in a dimly lit room, entirely unaware of where you are.\n);
-	printf("(type h to for a list of commands)\n");
-	scanf("%s", input);
 
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
@@ -100,6 +94,12 @@ int main() {
 
 	planeX = 0;
 	planeY = 0.66;
+	
+	render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
+	
+	printf("You wake up in a dimly lit room, entirely unaware of where you are.\n);
+	printf("(type h to for a list of commands)\n");
+	scanf("%s", input);
 
 	while (1) {
 		
