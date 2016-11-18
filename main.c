@@ -127,17 +127,6 @@ int main() {
 		} else if (strcmp(input, "r") == 0) {
 			// rotate right
 			oldDirX = dirX;
-			dirX = dirX * cos(-ROTSPEED) - dirY * sin(-ROTSPEED);
-			dirY = oldDirX * sin(-ROTSPEED) + dirY * cos(-ROTSPEED);
-			oldPlaneX = planeX;
-			planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
-			planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
-
-			cardinalDir++;
-			cardinalDir %= 4;
-		} else if (strcmp(input, "l") == 0) {
-			// rotate left
-			oldDirX = dirX;
 			dirX = dirX * cos(ROTSPEED) - dirY * sin(ROTSPEED);
 			dirY = oldDirX * sin(ROTSPEED) + dirY * cos(ROTSPEED);
 			oldPlaneX = planeX;
@@ -145,6 +134,21 @@ int main() {
 			planeY = oldPlaneX * sin(ROTSPEED) + planeY * cos(ROTSPEED);
 
 			cardinalDir--;
+			if(cardinalDir < 0)
+			{
+				cardinalDir = 3;
+			}
+			cardinalDir %= 4;
+		} else if (strcmp(input, "l") == 0) {
+			// rotate left
+			oldDirX = dirX;
+			dirX = dirX * cos(-ROTSPEED) - dirY * sin(-ROTSPEED);
+			dirY = oldDirX * sin(-ROTSPEED) + dirY * cos(-ROTSPEED);
+			oldPlaneX = planeX;
+			planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
+			planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
+
+			cardinalDir++;
 			cardinalDir %= 4;
 		} else if (strcmp(input, "m") == 0) {
 			char mapchoice[255];
