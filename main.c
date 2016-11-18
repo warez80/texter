@@ -45,7 +45,7 @@ void sleep_ms(int milliseconds) {
 #define START_X 18
 #define START_Y 5
 
-#define ROTSPEED 1.57079632679
+#define ROTSPEED PI/2
 #define MOVESPEED 1
 
 #define MAXINVENTORY 50
@@ -293,7 +293,7 @@ int hasItem(struct inventory playerInventory, char itemName[])
         }
     }
 
-    return playerInventory.items[i].quantity;
+    return 0;
 }
 
 void addItem(struct inventory playerInventory, char itemName[], int quantity)
