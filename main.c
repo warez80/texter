@@ -94,16 +94,34 @@ int main() {
 
 	planeX = 0;
 	planeY = 0.66;
-	
+
 	render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
-	
+
 	printf("You wake up in a dimly lit room, entirely unaware of where you are.\n");
 	printf("(type h to for a list of commands)\n");
 	scanf("%s", input);
+    int mapMode = 0;
 
 	while (1) {
-		
-		render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
+
+        if(mapMode == 0)
+        {
+            render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
+        } else if(mapMode == 1) {
+            for (j = 0; j < MAP_HEIGHT; ++j) {
+				for (i = 0; i < MAP_WIDTH; ++i) {
+					switch (map[i][j]) {
+						case 0: out = ' '; break;
+						case 1: out = '#'; break;
+					}
+					if (((int) posX) == i && ((int) posY) == j) {
+						out = 'P';
+					}
+					printf("%c", out);
+				}
+				printf("\n");
+			}
+        }
 
 		printf("w-what now senpai?\n");
 		scanf("%s", input);
@@ -129,7 +147,7 @@ int main() {
 			planeX = planeX * cos(ROTSPEED) - planeY * sin(ROTSPEED);
 			planeY = oldPlaneX * sin(ROTSPEED) + planeY * cos(ROTSPEED);
 		} else if (strcmp(input, "m") == 0) {
-			char dummy[255];
+			char mapchoice[255];
 			// render out a map
 			for (j = 0; j < MAP_HEIGHT; ++j) {
 				for (i = 0; i < MAP_WIDTH; ++i) {
@@ -144,8 +162,12 @@ int main() {
 				}
 				printf("\n");
 			}
-	            	printf("return to first person? ");
-			scanf("%s", dummy);
+            printf("return to first person(y/n)? ");
+			scanf("%s", mapchoice);
+			if(strcmp(mapchoice, "n") == 0)
+            {
+                mapMode = 1;
+            }
 		} else if (strcmp(input, "g") == 0) {
 			for (i = 0; i < 36; ++i) {
 				oldDirX = dirX;
@@ -160,6 +182,8 @@ int main() {
 				sleep_ms(100);
 			}
 
+		} else if (strcmp(input, "v") == 0){
+            mapMode = 0;
 		}
 
 	}
