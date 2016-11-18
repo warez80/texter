@@ -73,6 +73,8 @@ int main() {
 	planeX = 0;
 	planeY = 0.66;
 
+	int cardinalDir = 3;
+
 	while (1) {
 		render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
 
@@ -92,6 +94,9 @@ int main() {
 			oldPlaneX = planeX;
 			planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
 			planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
+
+			cardinalDir++;
+			cardinalDir %= 4;
 		} else if (strcmp(input, "l") == 0) {
 			oldDirX = dirX;
 			dirX = dirX * cos(ROTSPEED) - dirY * sin(ROTSPEED);
@@ -99,6 +104,9 @@ int main() {
 			oldPlaneX = planeX;
 			planeX = planeX * cos(ROTSPEED) - planeY * sin(ROTSPEED);
 			planeY = oldPlaneX * sin(ROTSPEED) + planeY * cos(ROTSPEED);
+
+			cardinalDir--;
+			cardinalDir %= 4;
 		} else if (strcmp(input, "m") == 0) {
 			// render out a map
 			for (j = 0; j < MAP_HEIGHT; ++j) {
@@ -108,7 +116,12 @@ int main() {
 						case 1: out = '#'; break;
 					}
 					if (((int) posX) == i && ((int) posY) == j) {
-						out = 'P';
+						switch (cardinalDir) {
+							case 0: out = '^'; break;
+							case 1: out = '>'; break;
+							case 2: out = 'v'; break;
+							case 3: out = '<'; break;
+						}
 					}
 					printf("%c", out);
 				}
