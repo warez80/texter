@@ -30,6 +30,18 @@ int SCREEN_WIDTH, SCREEN_HEIGHT;
 	}
 #endif
 
+// sleep function
+void sleep_ms(int milliseconds) {
+#ifdef _WIN32
+	Sleep(milliseconds);
+#else
+	struct timespec ts;
+	ts.tv_sec = milliseconds / 1000;
+	ts.tv_nsec = (milliseconds % 1000) * 1000000;
+	nanosleep(&ts, NULL);
+#endif
+}
+
 #define START_X 18
 #define START_Y 5
 
@@ -47,9 +59,6 @@ int main() {
 	int waste;
 	int i, j;
 	char out;
-	//struct timespec lookAroundSleeper, lookAroundSleeper2;
-	//lookAroundSleeper.tv_sec = 0;
-	//lookAroundSleeper.tv_nsec = 100000000L;
 
 	int map[MAP_WIDTH][MAP_HEIGHT];
 
@@ -118,8 +127,8 @@ int main() {
 				planeY = oldPlaneX * sin(-PI / 18) + planeY * cos(-PI / 18);
 
 				render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
-
-				//nanosleep(&lookAroundSleeper, &lookAroundSleeper2);
+				
+				sleep_ms(100);
 			}
 
 		}
