@@ -125,6 +125,7 @@ int main() {
 			cardinalDir--;
 			cardinalDir %= 4;
 		} else if (strcmp(input, "m") == 0) {
+			char dummy[255];
 			// render out a map
 			for (j = 0; j < MAP_HEIGHT; ++j) {
 				for (i = 0; i < MAP_WIDTH; ++i) {
@@ -144,8 +145,7 @@ int main() {
 				}
 				printf("\n");
 			}
-            char dummy[255];
-            printf("return to first person? ");
+	            	printf("return to first person? ");
 			scanf("%s", dummy);
 		} else if (strcmp(input, "g") == 0) {
 			for (i = 0; i < 36; ++i) {
