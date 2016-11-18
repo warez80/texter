@@ -111,6 +111,7 @@ int main() {
 		if (strcmp(input, "quit") == 0) {
 			break;
 		} else if (strcmp(input, "f") == 0) {
+			// forward
 			if (map[(int) (posX + dirX * MOVESPEED)][(int) posY] == 0) posX += dirX * MOVESPEED;
 			if (map[(int) posX][(int) (posY + dirY * MOVESPEED)] == 0) posY += dirY * MOVESPEED;
 		} else if (strcmp(input, "r") == 0) {
@@ -122,6 +123,7 @@ int main() {
 			planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
 			planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
 		} else if (strcmp(input, "l") == 0) {
+			// rotate left
 			oldDirX = dirX;
 			dirX = dirX * cos(ROTSPEED) - dirY * sin(ROTSPEED);
 			dirY = oldDirX * sin(ROTSPEED) + dirY * cos(ROTSPEED);
@@ -147,6 +149,7 @@ int main() {
 	            	printf("return to first person? ");
 			scanf("%s", dummy);
 		} else if (strcmp(input, "g") == 0) {
+			// pan around the room
 			for (i = 0; i < 36; ++i) {
 				oldDirX = dirX;
 				dirX = dirX * cos(-PI / 18) - dirY * sin(-PI / 18);
@@ -196,6 +199,7 @@ void fill_map(int map[][MAP_HEIGHT]) {
 }
 
 
+// renders out some Wolfenstein-style raycasting
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY) {
 	int x, i, j;
 	char buffer[SCREEN_WIDTH][SCREEN_HEIGHT];
@@ -289,13 +293,10 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 
 }
 
-int hasItem(struct inventory playerInventory, char itemName[])
-{
+int hasItem(struct inventory playerInventory, char itemName[]) {
     int i, size = playerInventory.size;
-    for(i = 0; i < size; i++)
-    {
-        if(strcmp(playerInventory.items[i].name, itemName) == 0)
-        {
+    for(i = 0; i < size; i++) {
+        if(strcmp(playerInventory.items[i].name, itemName) == 0) {
             return playerInventory.items[i].quantity;
         }
     }
@@ -303,13 +304,10 @@ int hasItem(struct inventory playerInventory, char itemName[])
     return playerInventory.items[i].quantity;
 }
 
-void addItem(struct inventory playerInventory, char itemName[], int quantity)
-{
+void addItem(struct inventory playerInventory, char itemName[], int quantity) {
     int i, size = playerInventory.size;
-    for(i = 0; i < size; i++)
-    {
-        if(strcmp(playerInventory.items[i].name, itemName) == 0)
-        {
+    for(i = 0; i < size; i++) {
+        if(strcmp(playerInventory.items[i].name, itemName) == 0) {
             playerInventory.items[i].quantity += quantity;
             return;
         }
