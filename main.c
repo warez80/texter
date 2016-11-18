@@ -199,8 +199,14 @@ int main() {
 				sleep_ms(100);
 			}
 
-		} else if (strcmp(input, "v") == 0){
+		} else if (strcmp(input, "v") == 0) {
             mapMode = 0;
+		} else if (strcmp(input, "h") == 0) {
+            printf("COMMANDS");
+            printf("f: move forward");
+            printf("l/r: turn left/right");
+            printf("m: map mode");
+            printf("v: view mode");
 		}
 
 	}
