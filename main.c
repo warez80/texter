@@ -65,9 +65,6 @@ struct room {
     int map[MAP_WIDTH][MAP_HEIGHT];
 };
 
-struct floor1{
-     int map[
-
 void fill_map(int map[][MAP_HEIGHT]);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY);
 int hasItem(struct inventory, char itemName[]);
