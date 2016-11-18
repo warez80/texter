@@ -61,7 +61,6 @@ struct inventory {
 };
 
 struct map {
-    struct map maps[25];
     char desc[200];
 };
 
