@@ -74,7 +74,7 @@ int main() {
 	int i, j;
 	char out;
 
-	struct item inventory[MAXINVENTORY];
+	struct inventory;
 	inventory.size = 0;
 
 	int map[MAP_WIDTH][MAP_HEIGHT];
@@ -304,4 +304,5 @@ void addItem(struct item inventory[], char itemName[], int quantity)
     }
     strcpy(inventory.items[size].name, itemName);
     inventory.items[size].quantity = quantity;
+    inventory.size += 1;
 }
