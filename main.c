@@ -33,7 +33,7 @@ int SCREEN_WIDTH, SCREEN_HEIGHT;
 #define START_X 18
 #define START_Y 5
 
-#define ROTSPEED 0.25
+#define ROTSPEED 1.57079632679
 #define MOVESPEED 1
 
 void fill_map(int map[][MAP_HEIGHT]);
@@ -47,12 +47,12 @@ int main() {
 	int waste;
 	int i, j;
 	char out;
-	struct timespec lookAroundSleeper, lookAroundSleeper2;
-	lookAroundSleeper.tv_sec = 0;
-	lookAroundSleeper.tv_nsec = 100000000L;
+	//struct timespec lookAroundSleeper, lookAroundSleeper2;
+	//lookAroundSleeper.tv_sec = 0;
+	//lookAroundSleeper.tv_nsec = 100000000L;
 
 	int map[MAP_WIDTH][MAP_HEIGHT];
-	
+
 	fill_map(map);
 
 	posX = START_X;
@@ -66,10 +66,10 @@ int main() {
 
 	while (1) {
 		render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
-		
+
 		printf("what do?\n");
 		scanf("%s", input);
-		
+
 		if (strcmp(input, "quit") == 0) {
 			break;
 		} else if (strcmp(input, "f") == 0) {
@@ -105,8 +105,9 @@ int main() {
 				}
 				printf("\n");
 			}
-			
-			scanf("%s", NULL);
+            char dummy[255];
+            printf("return to first person? ");
+			scanf("%s", dummy);
 		} else if (strcmp(input, "g") == 0) {
 			for (i = 0; i < 36; ++i) {
 				oldDirX = dirX;
@@ -117,8 +118,8 @@ int main() {
 				planeY = oldPlaneX * sin(-PI / 18) + planeY * cos(-PI / 18);
 
 				render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
-				
-				nanosleep(&lookAroundSleeper, &lookAroundSleeper2);
+
+				//nanosleep(&lookAroundSleeper, &lookAroundSleeper2);
 			}
 
 		}
@@ -148,7 +149,7 @@ void fill_map(int map[][MAP_HEIGHT]) {
 	}
 
 	// TODO: generate the actual map here
-	
+
 	for (x = 0; x < MAP_HEIGHT; ++x) {
 		if (x < MAP_WIDTH && x % 3 == 0) {
 			map[x][x] = 1;
@@ -176,13 +177,13 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 		rayPosY = posY;
 		rayDirX = dirX + planeX * cameraX;
 		rayDirY = dirY + planeY * cameraY;
-		
+
 		mapX = (int) rayPosX;
 		mapY = (int) rayPosY;
 
 		deltaDistX = sqrt(1 + (rayDirY  * rayDirY) / (rayDirX * rayDirX));
 		deltaDistY = sqrt(1 + (rayDirX  * rayDirX) / (rayDirY * rayDirY));
-		
+
 		hit = 0;
 
 		if (rayDirX < 0) {
@@ -200,7 +201,7 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 			stepY = 1;
 			sideDistY = (mapY + 1.0 - rayPosY) * deltaDistY;
 		}
-		
+
 		while (hit == 0) {
 			if (sideDistX < sideDistY) {
 				sideDistX += deltaDistY;
@@ -216,18 +217,18 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 
 		if (side == 0) 	perpWallDist = (mapX - rayPosX + (1 - stepX) / 2) / rayDirX;
 		else 		perpWallDist = (mapY - rayPosY + (1 - stepY) / 2) / rayDirY;
-		
+
 		lineHeight = (int) (SCREEN_HEIGHT / perpWallDist);
-		
+
 		drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
 		if (drawStart < 0) drawStart = 0;
 
 		drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
 		if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
-		
+
 		switch (map[mapX][mapY]) {
 			case 0: outColor = ' '; break;
-			case 1: 
+			case 1:
 				if (side) outColor = '%';
 				else outColor = '#';
 				break;
