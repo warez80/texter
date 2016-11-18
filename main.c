@@ -97,7 +97,7 @@ int main() {
 	
 	render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
 	
-	printf("You wake up in a dimly lit room, entirely unaware of where you are.\n);
+	printf("You wake up in a dimly lit room, entirely unaware of where you are.\n");
 	printf("(type h to for a list of commands)\n");
 	scanf("%s", input);
 
