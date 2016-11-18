@@ -51,7 +51,7 @@ void sleep_ms(int milliseconds) {
 #define MAXINVENTORY 50
 
 struct item {
-    char name[50];
+    char name[25];
     int quantity;
 };
 
