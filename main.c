@@ -12,22 +12,22 @@ int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 // this section makes sure that the game width and height matches the terminal size.
 #ifdef _WIN32
-	#include <windows.h>
-	void calculateScreenSize() {
-		CONSOLE_SCREEN_BUFFER_INFO csbi;
-		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-		SCREEN_WIDTH = csbi.srWindow.Right - csbi.srWindow.Left;
-		SCREEN_HEIGHT = csbi.srWindow.Bottom - csbi.srWindow.Top;
-	}
+#include <windows.h>
+void calculateScreenSize() {
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+	SCREEN_WIDTH = csbi.srWindow.Right - csbi.srWindow.Left;
+	SCREEN_HEIGHT = csbi.srWindow.Bottom - csbi.srWindow.Top;
+}
 #else
-	#include <sys/ioctl.h>
-	#include <unistd.h>
-	void calculateScreenSize() {
-		struct winsize w;
-		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-		SCREEN_WIDTH = w.ws_col - 1;
-		SCREEN_HEIGHT = w.ws_row - 1;
-	}
+#include <sys/ioctl.h>
+#include <unistd.h>
+void calculateScreenSize() {
+	struct winsize w;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	SCREEN_WIDTH = w.ws_col - 1;
+	SCREEN_HEIGHT = w.ws_row - 1;
+}
 #endif
 
 // sleep function
@@ -51,18 +51,18 @@ void sleep_ms(int milliseconds) {
 #define MAXINVENTORY 50
 
 struct item {
-    char name[25];
-    int quantity;
+	char name[25];
+	int quantity;
 };
 
 struct inventory {
-    struct item items[MAXINVENTORY];
-    int size;
+	struct item items[MAXINVENTORY];
+	int size;
 };
 
 struct room {
-    char desc[200];
-    int map[MAP_WIDTH][MAP_HEIGHT];
+	char desc[200];
+	int map[MAP_WIDTH][MAP_HEIGHT];
 };
 
 void fill_map(int map[][MAP_HEIGHT]);
@@ -102,18 +102,18 @@ int main() {
 	printf("You wake up in a dimly lit room, entirely unaware of where you are.\n");
 	printf("(type h to for a list of commands)\n");
 	scanf("%s", input);
-    int mapMode = 0;
+	int mapMode = 0;
 
 	cardinalDir = 3;
 
 	while (1) {
 
-        if(mapMode == 0)
-        {
-            render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
-        } else if(mapMode == 1) {
+		if(mapMode == 0)
+		{
+			render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
+		} else if(mapMode == 1) {
 			render_map(map, posX, posY, dirX, dirY);
-        }
+		}
 
 		printf("w-what now senpai?\n");
 		scanf("%s", input);
@@ -152,14 +152,14 @@ int main() {
 			render_map(map, posX, posY, dirX, dirY);
 
 			// ask user to return to view mode
-            printf("return to view mode(y/n)? ");
+			printf("return to view mode(y/n)? ");
 			scanf("%s", mapchoice);
 			if(strcmp(mapchoice, "n") == 0)
-            {
-                mapMode = 1;
-            } else {
+			{
+				mapMode = 1;
+			} else {
 				mapMode = 0;
-            }
+			}
 		} else if (strcmp(input, "g") == 0) {
 			// pan around the room
 			for (i = 0; i < 36; ++i) {
@@ -178,11 +178,11 @@ int main() {
 		} else if (strcmp(input, "v") == 0) {
 			mapMode = 0;
 		} else if (strcmp(input, "h") == 0) {
-            printf("COMMANDS");
-            printf("f: move forward");
-            printf("l/r: turn left/right");
-            printf("m: map mode");
-            printf("v: view mode");
+			printf("COMMANDS");
+			printf("f: move forward");
+			printf("l/r: turn left/right");
+			printf("m: map mode");
+			printf("v: view mode");
 		}
 
 	}
@@ -331,25 +331,25 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 }
 
 int hasItem(struct inventory playerInventory, char itemName[]) {
-    int i, size = playerInventory.size;
-    for(i = 0; i < size; i++) {
-        if(strcmp(playerInventory.items[i].name, itemName) == 0) {
-            return playerInventory.items[i].quantity;
-        }
-    }
+	int i, size = playerInventory.size;
+	for(i = 0; i < size; i++) {
+		if(strcmp(playerInventory.items[i].name, itemName) == 0) {
+			return playerInventory.items[i].quantity;
+		}
+	}
 
-    return 0;
+	return 0;
 }
 
 void addItem(struct inventory playerInventory, char itemName[], int quantity) {
-    int i, size = playerInventory.size;
-    for(i = 0; i < size; i++) {
-        if(strcmp(playerInventory.items[i].name, itemName) == 0) {
-            playerInventory.items[i].quantity += quantity;
-            return;
-        }
-    }
-    strcpy(playerInventory.items[size].name, itemName);
-    playerInventory.items[size].quantity = quantity;
-    playerInventory.size += 1;
+	int i, size = playerInventory.size;
+	for(i = 0; i < size; i++) {
+		if(strcmp(playerInventory.items[i].name, itemName) == 0) {
+			playerInventory.items[i].quantity += quantity;
+			return;
+		}
+	}
+	strcpy(playerInventory.items[size].name, itemName);
+	playerInventory.items[size].quantity = quantity;
+	playerInventory.size += 1;
 }
