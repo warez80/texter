@@ -213,7 +213,6 @@ int main() {
 			shouldRenderNextFrame = 1;
 		}
 
-		printf("w-what now senpai?\n");
 		scanf("%s", input);
 
 	}
