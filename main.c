@@ -196,6 +196,7 @@ int main() {
 			printf("l/r: turn left/right\n");
 			printf("m: check map\n");
 			printf("v: toggle view mode\n");
+			printf("quit: exit the game\n");
 			printf("\n");
 
 			// make sure the next frame doesn't get rendered so the user can
