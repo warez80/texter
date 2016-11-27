@@ -50,6 +50,9 @@ void sleep_ms(int milliseconds) {
 
 #define MAXINVENTORY 50
 
+#define VIEW_FIRST_PERSON 0
+#define VIEW_TOP_DOWN 1
+
 struct item {
 	char name[25];
 	int quantity;
@@ -88,8 +91,8 @@ int main() {
 
 	fill_map(map);
 
-	posX = START_X;
-	posY = START_Y;
+	posX = START_X + .5;
+	posY = START_Y + .5;
 
 	dirX = -1;
 	dirY = 0;
@@ -102,16 +105,15 @@ int main() {
 	printf("You wake up in a dimly lit room, entirely unaware of where you are.\n");
 	printf("(type h to for a list of commands)\n");
 	scanf("%s", input);
-	int mapMode = 0;
+
+	int viewMode = 0;
 
 	cardinalDir = 3;
 
 	while (1) {
-
-		if(mapMode == 0)
-		{
+		if(viewMode == VIEW_FIRST_PERSON) {
 			render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
-		} else if(mapMode == 1) {
+		} else if (viewMode == VIEW_TOP_DOWN) {
 			render_map(map, posX, posY, dirX, dirY, cardinalDir);
 		}
 
@@ -133,11 +135,7 @@ int main() {
 			planeX = planeX * cos(ROTSPEED) - planeY * sin(ROTSPEED);
 			planeY = oldPlaneX * sin(ROTSPEED) + planeY * cos(ROTSPEED);
 
-			cardinalDir--;
-			if(cardinalDir < 0)
-			{
-				cardinalDir = 3;
-			}
+			cardinalDir++;
 			cardinalDir %= 4;
 		} else if (strcmp(input, "l") == 0) {
 			// rotate left
@@ -148,7 +146,10 @@ int main() {
 			planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
 			planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
 
-			cardinalDir++;
+			cardinalDir--;
+			if(cardinalDir < 0) {
+				cardinalDir = 3;
+			}
 			cardinalDir %= 4;
 		} else if (strcmp(input, "m") == 0) {
 			char mapchoice[255];
@@ -158,11 +159,10 @@ int main() {
 			// ask user to return to view mode
 			printf("return to view mode(y/n)? ");
 			scanf("%s", mapchoice);
-			if(strcmp(mapchoice, "n") == 0)
-			{
-				mapMode = 1;
+			if(strcmp(mapchoice, "n") == 0) {
+				viewMode = VIEW_TOP_DOWN;
 			} else {
-				mapMode = 0;
+				viewMode = VIEW_FIRST_PERSON;
 			}
 		} else if (strcmp(input, "g") == 0) {
 			// pan around the room
@@ -180,7 +180,8 @@ int main() {
 			}
 
 		} else if (strcmp(input, "v") == 0) {
-			mapMode = 0;
+			// toggle view mode
+			viewMode = !viewMode;
 		} else if (strcmp(input, "h") == 0) {
 			printf("COMMANDS");
 			printf("f: move forward");
@@ -233,9 +234,9 @@ void render_map(int map[][MAP_HEIGHT], double posX, double posY, double dirX, do
 			}
 			if (((int) posX) == i && ((int) posY) == j) {
 				switch (cardinalDir) {
-					case 0: out = 'v'; break;
+					case 0: out = '^'; break;
 					case 1: out = '>'; break;
-					case 2: out = '^'; break;
+					case 2: out = 'v'; break;
 					case 3: out = '<'; break;
 				}
 			}
