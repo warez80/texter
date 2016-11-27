@@ -155,15 +155,6 @@ int main() {
 			char mapchoice[255];
 			// render out a map
 			render_map(map, posX, posY, dirX, dirY,cardinalDir);
-
-			// ask user to return to view mode
-			printf("return to view mode(y/n)? ");
-			scanf("%s", mapchoice);
-			if(strcmp(mapchoice, "n") == 0) {
-				viewMode = VIEW_TOP_DOWN;
-			} else {
-				viewMode = VIEW_FIRST_PERSON;
-			}
 		} else if (strcmp(input, "g") == 0) {
 			// pan around the room
 			for (i = 0; i < 36; ++i) {
