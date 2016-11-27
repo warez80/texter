@@ -289,9 +289,6 @@ int cmp_sprite_dist(const void* a, const void* b) {
 
 
 // renders out some Wolfenstein-style raycasting
-//
-// FIXME: renders a little slow on Windows :'(, probably 
-// something to do with console output being buffered weirdly
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect) {
 	int x, i, j;
 	char* buffer = (char*) malloc(sizeof(int) * SCREEN_WIDTH * SCREEN_HEIGHT);
