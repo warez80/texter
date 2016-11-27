@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include "textures.h"
 
+void init_textures() {
+	TEXTURES[0] = load_texture_from_file("tex/sword.bmf");
+}
+
 struct Texture load_texture_from_file(char* filename) {
 	FILE* fp;
 	int x, y;

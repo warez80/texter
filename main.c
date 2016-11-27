@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <time.h>
+#include "textures.h"
 
 #define PI 3.1415926536
 
@@ -68,14 +70,31 @@ struct room {
 	int map[MAP_WIDTH][MAP_HEIGHT];
 };
 
+struct Sprite {
+	int textureId;
+	double x, y;
+
+	// used for rendering, do not touch
+	double dist;
+};
+
 void fill_map(int map[][MAP_HEIGHT]);
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, int cardinalDir);
-void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY);
+void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect);
 int hasItem(struct inventory, char itemName[]);
 void addItem(struct inventory, char itemName[], int quantity);
+void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
+
+#define numSprites 1
+struct Sprite SPRITES[numSprites];
+int SPRITE_VISIBLE[numSprites];
 
 int main() {
 	calculateScreenSize();
+	init_textures();
+
+	init_sprite(&SPRITES[0], 0, 19.5, 6.5);
+	SPRITE_VISIBLE[0] = 1;
 
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
@@ -100,7 +119,8 @@ int main() {
 	planeX = 0;
 	planeY = 0.66;
 
-	render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
+	// use a fisheye effect to add a little disorientation
+	render_screen(map, posX, posY, dirX, dirY, planeX, planeY, 1);
 
 	printf("You wake up in a dimly lit room, entirely unaware of where you are.\n");
 	printf("(type 'h' for a list of commands)\n");
@@ -158,7 +178,7 @@ int main() {
 				planeX = planeX * cos(-PI / 18) - planeY * sin(-PI / 18);
 				planeY = oldPlaneX * sin(-PI / 18) + planeY * cos(-PI / 18);
 
-				render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
+				render_screen(map, posX, posY, dirX, dirY, planeX, planeY, 0);
 
 				sleep_ms(100);
 			}
@@ -184,7 +204,7 @@ int main() {
 
 		if (shouldRenderNextFrame) {
 			if(viewMode == VIEW_FIRST_PERSON) {
-				render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
+				render_screen(map, posX, posY, dirX, dirY, planeX, planeY, 0);
 			} else if (viewMode == VIEW_TOP_DOWN) {
 				render_map(map, posX, posY, dirX, dirY, cardinalDir);
 			}
@@ -197,6 +217,12 @@ int main() {
 
 	}
 	return 0;
+}
+
+void init_sprite(struct Sprite* sprite, int textureId, double x, double y) {
+	sprite->textureId = textureId;
+	sprite->x = x;
+	sprite->y = y;
 }
 
 void fill_map(int map[][MAP_HEIGHT]) {
@@ -251,13 +277,23 @@ void render_map(int map[][MAP_HEIGHT], double posX, double posY, double dirX, do
 	}
 }
 
+// A function to compare two sprites by render distance that will be necessary for sprite rendering in `render_screen`
+int cmp_sprite_dist(const void* a, const void* b) {
+	struct Sprite *aval, *bval;
+	aval = (struct Sprite *) a;
+	bval = (struct Sprite *) b;
+	return (bval->dist) - (aval->dist);
+}
+
+
 // renders out some Wolfenstein-style raycasting
 //
 // FIXME: renders a little slow on Windows :'(, probably 
 // something to do with console output being buffered weirdly
-void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY) {
+void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect) {
 	int x, i, j;
 	char buffer[SCREEN_WIDTH][SCREEN_HEIGHT];
+	double zBuffer[SCREEN_WIDTH];
 
 	for (i = 0; i < SCREEN_WIDTH; ++i) {
 		for (j = 0; j < SCREEN_HEIGHT; ++j) {
@@ -312,8 +348,15 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 			if (map[mapX][mapY] > 0) hit = 1;
 		}
 
-		if (side == 0) 	perpWallDist = (mapX - rayPosX + (1 - stepX) / 2) / rayDirX;
-		else 		perpWallDist = (mapY - rayPosY + (1 - stepY) / 2) / rayDirY;
+		if (fisheyeEffect) {
+			double dx, dy;
+			dx = rayPosX - mapX;
+			dy = rayPosY - mapY;
+			perpWallDist = sqrt(dx*dx+dy*dy);
+		} else {
+			if (side == 0) 	perpWallDist = (mapX - rayPosX + (1 - stepX) / 2) / rayDirX;
+			else 		perpWallDist = (mapY - rayPosY + (1 - stepY) / 2) / rayDirY;
+		}
 
 		lineHeight = (int) (SCREEN_HEIGHT / perpWallDist);
 
@@ -337,7 +380,67 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 				buffer[x][i] = outColor;
 			}
 		}
+
+		zBuffer[x] = perpWallDist;
 	}
+	
+	for (i = 0; i < numSprites; ++i) {
+		double dx, dy;
+		dx = SPRITES[i].x - posX;
+		dy = SPRITES[i].y - posY;
+		SPRITES[i].dist = dx*dx + dy*dy;
+	}
+
+	qsort(SPRITES, numSprites, sizeof(struct Sprite), cmp_sprite_dist);
+
+	for (i = 0; i < numSprites; ++i) {
+		double spriteX, spriteY, invDet, transformX, transformY;
+		int spriteScreenX, spriteSize, drawStartY, drawEndY, drawStartX, drawEndX, stripe;
+
+		spriteX = SPRITES[i].x - posX;
+		spriteY = SPRITES[i].y - posY;
+
+		invDet = 1.0 / (planeX * dirY - dirX * planeY);
+
+		transformX = invDet * (dirY * spriteX - dirX * spriteY);
+		transformY = invDet * (-planeY * spriteX + planeX * spriteY);
+
+		spriteScreenX = (int) ((SCREEN_WIDTH >> 1) * (1 + transformX / transformY));
+
+		if (fisheyeEffect) {
+			spriteSize = abs((int) (SCREEN_HEIGHT / sqrt(spriteX*spriteX + spriteY*spriteY)));
+		} else {
+			spriteSize = abs((int) (SCREEN_HEIGHT / transformY));
+		}
+		
+		drawStartY = (SCREEN_HEIGHT >> 1) - (spriteSize >> 1);
+		if (drawStartY < 0) drawStartY = 0;
+		drawEndY = (SCREEN_HEIGHT + spriteSize) >> 1;
+		if (drawEndY >= SCREEN_HEIGHT) drawEndY = SCREEN_HEIGHT - 1;
+		
+		drawStartX = spriteScreenX - (spriteSize >> 1);
+		if (drawStartX < 0) drawStartX = 0;
+		drawEndX = spriteScreenX + (spriteSize >> 1);
+		if (drawEndX >= SCREEN_WIDTH) drawEndX = SCREEN_WIDTH - 1;
+
+		for (stripe = drawStartX; stripe < drawEndX; ++stripe) {
+			int texX = ((int) (256 * (stripe - drawStartX) * 16 / spriteSize)) / 256;
+
+			if (transformY > 0 && stripe > 0 && stripe < SCREEN_WIDTH && transformY < zBuffer[stripe]) {
+				int y;
+				for (y = drawStartY; y < drawEndY; ++y) {
+					int d, texY;
+					char color;
+					d = y * 256 - SCREEN_HEIGHT * 128 + spriteSize * 128;
+					texY = ((d * 16) / spriteSize) / 256;
+					color = get_texture_char_at(TEXTURES[SPRITES[i].textureId], texX, texY);
+					if (color != ' ') buffer[stripe][y] = color;
+				}
+			}
+		}
+	}
+		
+
 
 	for (i = 0; i < SCREEN_HEIGHT; ++i) {
 		// iterating backwards to fix some really weird rendering bug
