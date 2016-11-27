@@ -440,7 +440,8 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 					char color;
 					d = y * 256 - SCREEN_HEIGHT * 128 + spriteSize * 128;
 					texY = ((d * 16) / spriteSize) / 256;
-					color = get_texture_char_at(TEXTURES[SPRITES[i].textureId], texX, texY);
+					// the 16 - part is to fix an issue with mirroring
+					color = get_texture_char_at(TEXTURES[SPRITES[i].textureId], 16 - texX, texY);
 					if (color != ' ') buffer[stripe][y] = color;
 				}
 			}
