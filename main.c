@@ -103,23 +103,15 @@ int main() {
 	render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
 
 	printf("You wake up in a dimly lit room, entirely unaware of where you are.\n");
-	printf("(type h to for a list of commands)\n");
+	printf("(type 'h' for a list of commands)\n");
 	scanf("%s", input);
 
 	int viewMode = 0;
+	int shouldRenderNextFrame = 1;
 
 	cardinalDir = 3;
 
 	while (1) {
-		if(viewMode == VIEW_FIRST_PERSON) {
-			render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
-		} else if (viewMode == VIEW_TOP_DOWN) {
-			render_map(map, posX, posY, dirX, dirY, cardinalDir);
-		}
-
-		printf("w-what now senpai?\n");
-		scanf("%s", input);
-
 		if (strcmp(input, "quit") == 0) {
 			break;
 		} else if (strcmp(input, "f") == 0) {
@@ -152,9 +144,10 @@ int main() {
 			}
 			cardinalDir %= 4;
 		} else if (strcmp(input, "m") == 0) {
-			char mapchoice[255];
 			// render out a map
 			render_map(map, posX, posY, dirX, dirY,cardinalDir);
+
+			shouldRenderNextFrame = 0;
 		} else if (strcmp(input, "g") == 0) {
 			// pan around the room
 			for (i = 0; i < 36; ++i) {
@@ -174,12 +167,33 @@ int main() {
 			// toggle view mode
 			viewMode = !viewMode;
 		} else if (strcmp(input, "h") == 0) {
-			printf("COMMANDS");
-			printf("f: move forward");
-			printf("l/r: turn left/right");
-			printf("m: map mode");
-			printf("v: view mode");
+			printf("\n");
+			printf("=-=-=-=-=-=-=-=\n");
+			printf("   COMMANDS\n");
+			printf("=-=-=-=-=-=-=-=\n\n");
+			printf("f: move forward\n");
+			printf("l/r: turn left/right\n");
+			printf("m: check map\n");
+			printf("v: toggle view mode\n");
+			printf("\n");
+
+			// make sure the next frame doesn't get rendered so the user can
+			// see the output.
+			shouldRenderNextFrame = 0;
 		}
+
+		if (shouldRenderNextFrame) {
+			if(viewMode == VIEW_FIRST_PERSON) {
+				render_screen(map, posX, posY, dirX, dirY, planeX, planeY);
+			} else if (viewMode == VIEW_TOP_DOWN) {
+				render_map(map, posX, posY, dirX, dirY, cardinalDir);
+			}
+		} else {
+			shouldRenderNextFrame = 1;
+		}
+
+		printf("w-what now senpai?\n");
+		scanf("%s", input);
 
 	}
 	return 0;
@@ -238,6 +252,9 @@ void render_map(int map[][MAP_HEIGHT], double posX, double posY, double dirX, do
 }
 
 // renders out some Wolfenstein-style raycasting
+//
+// FIXME: renders a little slow on Windows :'(, probably 
+// something to do with console output being buffered weirdly
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY) {
 	int x, i, j;
 	char buffer[SCREEN_WIDTH][SCREEN_HEIGHT];
@@ -323,7 +340,9 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 	}
 
 	for (i = 0; i < SCREEN_HEIGHT; ++i) {
-		for (j = 0; j < SCREEN_WIDTH; ++j) {
+		// iterating backwards to fix some really weird rendering bug
+		// where the viewport is backwards
+		for (j = SCREEN_WIDTH - 1; j >= 0; --j) {
 			printf("%c", buffer[j][i]);
 		}
 		printf("\n");
