@@ -294,12 +294,12 @@ int cmp_sprite_dist(const void* a, const void* b) {
 // something to do with console output being buffered weirdly
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect) {
 	int x, i, j;
-	char buffer[SCREEN_WIDTH][SCREEN_HEIGHT];
-	double zBuffer[SCREEN_WIDTH];
+	char* buffer = (char*) malloc(sizeof(int) * SCREEN_WIDTH * SCREEN_HEIGHT);
+	double* zBuffer = (double*) malloc(sizeof(double) * SCREEN_WIDTH);
 
 	for (i = 0; i < SCREEN_WIDTH; ++i) {
 		for (j = 0; j < SCREEN_HEIGHT; ++j) {
-			buffer[i][j] = ' ';
+			buffer[i*SCREEN_HEIGHT+j] = ' ';
 		}
 	}
 
@@ -379,7 +379,7 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 		// draw line
 		for (i = drawStart; i <= drawEnd; ++i) {
 			if (0 <= i && i < SCREEN_HEIGHT) {
-				buffer[x][i] = outColor;
+				buffer[x*SCREEN_HEIGHT+i] = outColor;
 			}
 		}
 
@@ -439,24 +439,30 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 					char color;
 					d = y * 256 - SCREEN_HEIGHT * 128 + spriteSize * 128;
 					texY = ((d * 16) / spriteSize) / 256;
-					// the 16 - part is to fix an issue with mirroring
-					color = get_texture_char_at(TEXTURES[SPRITES[i].textureId], 16 - texX, texY);
-					if (color != ' ') buffer[stripe][y] = color;
+					// the 15 - part is to fix an issue with mirroring
+					color = get_texture_char_at(TEXTURES[SPRITES[i].textureId], 15 - texX, texY);
+					if (color != ' ') buffer[stripe*SCREEN_HEIGHT+y] = color;
 				}
 			}
 		}
 	}
-		
+	
+	free(zBuffer);
 
 
+	char* str = (char*) malloc(sizeof(char) * (SCREEN_WIDTH+1));
 	for (i = 0; i < SCREEN_HEIGHT; ++i) {
 		// iterating backwards to fix some really weird rendering bug
 		// where the viewport is backwards
 		for (j = SCREEN_WIDTH - 1; j >= 0; --j) {
-			printf("%c", buffer[j][i]);
+			str[SCREEN_WIDTH - 1 - j] = buffer[j*SCREEN_HEIGHT+i];
 		}
-		printf("\n");
+		str[SCREEN_WIDTH] = 0;
+		printf("%s\n", str);
 	}
+
+	free(str);
+	free(buffer);
 
 }
 
