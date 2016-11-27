@@ -73,6 +73,7 @@ struct room {
 struct Sprite {
 	int textureId;
 	double x, y;
+	int visible;
 
 	// used for rendering, do not touch
 	double dist;
@@ -85,7 +86,7 @@ int hasItem(struct inventory, char itemName[]);
 void addItem(struct inventory, char itemName[], int quantity);
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
 
-#define numSprites 1
+#define numSprites 2
 struct Sprite SPRITES[numSprites];
 int SPRITE_VISIBLE[numSprites];
 
@@ -94,7 +95,7 @@ int main() {
 	init_textures();
 
 	init_sprite(&SPRITES[0], 0, 19.5, 6.5);
-	SPRITE_VISIBLE[0] = 1;
+	init_sprite(&SPRITES[1], 1, 20.5, 8.5);
 
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
@@ -223,6 +224,8 @@ void init_sprite(struct Sprite* sprite, int textureId, double x, double y) {
 	sprite->textureId = textureId;
 	sprite->x = x;
 	sprite->y = y;
+	// sprites are visible by default
+	sprite->visible = 1;
 }
 
 void fill_map(int map[][MAP_HEIGHT]) {
@@ -396,6 +399,10 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 	for (i = 0; i < numSprites; ++i) {
 		double spriteX, spriteY, invDet, transformX, transformY;
 		int spriteScreenX, spriteSize, drawStartY, drawEndY, drawStartX, drawEndX, stripe;
+
+		if (!SPRITES[i].visible) {
+			continue;
+		}
 
 		spriteX = SPRITES[i].x - posX;
 		spriteY = SPRITES[i].y - posY;

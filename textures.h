@@ -7,7 +7,7 @@ struct Texture {
 	int bits[16];
 };
 
-struct Texture TEXTURES[1];
+struct Texture TEXTURES[2];
 
 void init_textures();
 
