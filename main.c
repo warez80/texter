@@ -80,7 +80,7 @@ struct Sprite {
 };
 
 void fill_map(int map[][MAP_HEIGHT]);
-void render_map(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, int cardinalDir);
+void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect);
 int hasItem(struct inventory, char itemName[]);
 void addItem(struct inventory, char itemName[], int quantity);
@@ -99,9 +99,7 @@ int main() {
 
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
-	int waste;
-	int i, j;
-	char out;
+	int i;
 	int cardinalDir;
 
 	struct inventory playerInventory;
@@ -166,7 +164,7 @@ int main() {
 			cardinalDir %= 4;
 		} else if (strcmp(input, "m") == 0) {
 			// render out a map
-			render_map(map, posX, posY, dirX, dirY,cardinalDir);
+			render_map(map, posX, posY, cardinalDir);
 
 			shouldRenderNextFrame = 0;
 		} else if (strcmp(input, "g") == 0) {
@@ -208,7 +206,7 @@ int main() {
 			if(viewMode == VIEW_FIRST_PERSON) {
 				render_screen(map, posX, posY, dirX, dirY, planeX, planeY, 0);
 			} else if (viewMode == VIEW_TOP_DOWN) {
-				render_map(map, posX, posY, dirX, dirY, cardinalDir);
+				render_map(map, posX, posY, cardinalDir);
 			}
 		} else {
 			shouldRenderNextFrame = 1;
@@ -257,7 +255,7 @@ void fill_map(int map[][MAP_HEIGHT]) {
 	}
 }
 
-void render_map(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, int cardinalDir) {
+void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir) {
 	int i, j;
 	char out;
 	for (j = 0; j < MAP_HEIGHT; ++j) {
@@ -290,6 +288,7 @@ int cmp_sprite_dist(const void* a, const void* b) {
 
 
 // renders out some Wolfenstein-style raycasting
+// MOST of this is taken from http://lodev.org/cgtutor/
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect) {
 	int x, i, j;
 	char* buffer = (char*) malloc(sizeof(int) * SCREEN_WIDTH * SCREEN_HEIGHT);
@@ -304,12 +303,12 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 	for (x = 0; x < SCREEN_WIDTH; ++x) {
 		char outColor;
 		int mapX, mapY, stepX, stepY, hit, side, lineHeight, drawStart, drawEnd;
-		double cameraX, cameraY, rayPosX, rayPosY, rayDirX, rayDirY, sideDistX, sideDistY, deltaDistX, deltaDistY, perpWallDist;
+		double cameraX, rayPosX, rayPosY, rayDirX, rayDirY, sideDistX, sideDistY, deltaDistX, deltaDistY, perpWallDist;
 		cameraX = 2.0 * x / SCREEN_WIDTH - 1;
 		rayPosX = posX;
 		rayPosY = posY;
 		rayDirX = dirX + planeX * cameraX;
-		rayDirY = dirY + planeY * cameraY;
+		rayDirY = dirY + planeY * cameraX;
 
 		mapX = (int) rayPosX;
 		mapY = (int) rayPosY;
@@ -360,10 +359,10 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 
 		lineHeight = (int) (SCREEN_HEIGHT / perpWallDist);
 
-		drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
+		drawStart = -lineHeight / 2 + (SCREEN_HEIGHT >> 1);
 		if (drawStart < 0) drawStart = 0;
 
-		drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
+		drawEnd = (lineHeight + SCREEN_HEIGHT) >> 1;
 		if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
 
 		switch (map[mapX][mapY]) {
