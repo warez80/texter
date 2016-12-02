@@ -96,12 +96,13 @@ int main() {
 
 
 	init_sprite(&SPRITES[SWORD_TEXID], SWORD_TEXID, 5.5, 22.5);
-	init_sprite(&SPRITES[EVIL_TEXID], EVIL_TEXID, 10.5, 6.5);
+	init_sprite(&SPRITES[CHEST_TEXID], CHEST_TEXID, 10.5, 6.5);
 	init_sprite(&SPRITES[DOOR_TEXID], DOOR_TEXID, 15.5, 17.5);
 	init_sprite(&SPRITES[SHOP_TEXID], SHOP_TEXID, 10.5, 13.5);
 	init_sprite(&SPRITES[MONSTER_TEXID], MONSTER_TEXID, 8.5, 1.5);
 	init_sprite(&SPRITES[WEB_TEXID], WEB_TEXID, 4.5, 9.5);
 	init_sprite(&SPRITES[TORCH_TEXID], TORCH_TEXID, 2.5, 10.5);
+	init_sprite(&SPRITES[GRAPPLE_TEXID], GRAPPLE_TEXID, 16.5, 14.5);
 
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;

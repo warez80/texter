@@ -3,14 +3,13 @@
 
 void init_textures() {
 	TEXTURES[SWORD_TEXID] = load_texture_from_file("tex/sword.bmf");
-	TEXTURES[EVIL_TEXID] = load_texture_from_file("tex/evil.bmf");
+	TEXTURES[CHEST_TEXID] = load_texture_from_file("tex/chest.bmf");
 	TEXTURES[DOOR_TEXID] = load_texture_from_file("tex/door.bmf");
 	TEXTURES[SHOP_TEXID] = load_texture_from_file("tex/shop.bmf");
 	TEXTURES[MONSTER_TEXID] = load_texture_from_file("tex/monster.bmf");
 	TEXTURES[WEB_TEXID] = load_texture_from_file("tex/web.bmf");
 	TEXTURES[TORCH_TEXID] = load_texture_from_file("tex/torch.bmf");
 	TEXTURES[GRAPPLE_TEXID] = load_texture_from_file("tex/grapple.bmf");
-	TEXTURES[CHEST_TEXID] = load_texture_from_file("tex/chest.bmf");
 }
 
 struct Texture load_texture_from_file(char* filename) {
