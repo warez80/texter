@@ -214,6 +214,8 @@ int main() {
 		} else if (strcmp(input, "v") == 0) {
 			// toggle view mode
 			viewMode = !viewMode;
+		} else if (strcmp(input, "s") == 0) {
+			turnAround(&dirX, &dirY, &planeX, &planeY, &cardinalDir);
 		} else if (strcmp(input, "h") == 0) {
 			printf("\n");
 			printf("=-=-=-=-=-=-=-=\n");
