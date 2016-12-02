@@ -84,8 +84,8 @@ int main() {
 	init_textures();
 	printf("Loaded textures.\n");
 
-	init_sprite(&SPRITES[6], 6, 1, 21);
-	init_sprite(&SPRITES[5], 5, 7, 12);
+	init_sprite(&SPRITES[6], 6, 1.5, 21.5);
+	init_sprite(&SPRITES[5], 5, 7.5, 12.5);
 
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
