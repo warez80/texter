@@ -10,12 +10,13 @@
 #define WEB_TEXID 5
 #define TORCH_TEXID 6
 #define GRAPPLE_TEXID 7
+#define CHEST_TEXID 8
 
 struct Texture {
 	int vals[16][16];
 };
 
-struct Texture TEXTURES[8];
+struct Texture TEXTURES[9];
 
 void init_textures();
 
