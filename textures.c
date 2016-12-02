@@ -2,14 +2,14 @@
 #include "textures.h"
 
 void init_textures() {
-	TEXTURES[0] = load_texture_from_file("tex/sword.bmf");
-	TEXTURES[1] = load_texture_from_file("tex/evil.bmf");
-	TEXTURES[2] = load_texture_from_file("tex/door.bmf");
-	TEXTURES[3] = load_texture_from_file("tex/shop.bmf");
-	TEXTURES[4] = load_texture_from_file("tex/monster.bmf");
-	TEXTURES[5] = load_texture_from_file("tex/web.bmf");
-	TEXTURES[6] = load_texture_from_file("tex/torch.bmf");
-	TEXTURES[7] = load_texture_from_file("tex/grapple.bmf");
+	TEXTURES[SWORD_TEXID] = load_texture_from_file("tex/sword.bmf");
+	TEXTURES[EVIL_TEXID] = load_texture_from_file("tex/evil.bmf");
+	TEXTURES[DOOR_TEXID] = load_texture_from_file("tex/door.bmf");
+	TEXTURES[SHOP_TEXID] = load_texture_from_file("tex/shop.bmf");
+	TEXTURES[MONSTER_TEXID] = load_texture_from_file("tex/monster.bmf");
+	TEXTURES[WEB_TEXID] = load_texture_from_file("tex/web.bmf");
+	TEXTURES[TORCH_TEXID] = load_texture_from_file("tex/torch.bmf");
+	TEXTURES[GRAPPLE_TEXID] = load_texture_from_file("tex/grapple.bmf");
 }
 
 struct Texture load_texture_from_file(char* filename) {
