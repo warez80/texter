@@ -67,7 +67,7 @@ void removeItem(struct inventory* i, char itemName[], int quantity) {
 	return;
 }
 
-void buyItem(struct inventory* shopInventory, struct inventory* playerInventory, struct item i) {
+int buyItem(struct inventory* shopInventory, struct inventory* playerInventory, struct item i) {
 	char itemName[25];
 	strcpy(itemName, i.name);
 	int quantity = i.quantity;
@@ -85,6 +85,31 @@ void buyItem(struct inventory* shopInventory, struct inventory* playerInventory,
 
 		playerInventory->gold -= value;
 		shopInventory->gold += value;
+	} else {
+		return 0;
 	}
-	return;
+	return 1;
+}
+
+void shopMenu(struct inventory* shopInventory, struct inventory* playerInventory) {
+	while(1) {
+		int i, input = -1;
+		for(i = 0; i < shopInventory->amt; i++) {
+			printf("%d: %s\n", i+1, shopInventory->items[i].name);
+		}
+		printf("What would you like to buy (0 to exit)?\n");
+		scanf("%d", &input);
+		if(input == 0) {
+			return;
+		} else if(input > 0 && input <= shopInventory->amt) {
+			int successfulPurchase = buyItem(shopInventory, playerInventory, shopInventory->items[input-1]);
+			if(successfulPurchase == 1) {
+				return;
+			} else {
+				printf("Insufficient gold\n");
+			}
+		} else {
+			printf("Invalid choice\n");
+		}
+	}
 }
