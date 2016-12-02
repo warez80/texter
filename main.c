@@ -310,8 +310,8 @@ int interact(double posX, double posY, double dirX, double dirY) {
 			case MONSTER_TEXID: 
 				if(strcmp(playerInventory.items[SWORD_TEXID].name, "sword") == 0){
 					SPRITES[MONSTER_TEXID].visible = 0;
-					//printf("you hit it, it died, idk what else you want \n");
-					return 1;
+					printf("you hit it, it died, idk what else you want \n");
+					GAME_WON = 1;
 				}
 				else
 					printf("wow, you're bad at this\n");
