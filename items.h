@@ -21,7 +21,7 @@ struct inventory {
 struct item sword = {"sword", 1, 100};
 struct item torch = {"torch", 1 , 2};
 struct item key = {"key", 1, 5};
-struct item grapple = {"grapple", 1, 10};
+struct item grappler = {"grapple", 1, 10};
 
 struct inventory shop1 = {{{"key",1,5}},1,0};
 
