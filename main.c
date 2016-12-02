@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <time.h>
+#include "textures.h"
 
 #define PI 3.1415926536
 
@@ -82,22 +83,12 @@ struct Sprite {
 	double dist;
 };
 
-struct Texture {
-	int bits[16];
-};
-
-
 void fill_map(int map[][MAP_HEIGHT]);
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect);
 int hasItem(struct inventory, char itemName[]);
 void addItem(struct inventory, char itemName[], int quantity);
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
-
-struct Texture TEXTURES[2];
-void init_textures();
-struct Texture load_texture_from_file(char* filename);
-char get_texture_char_at(struct Texture texture, int x, int y);
 
 #define numSprites 2
 struct Sprite SPRITES[numSprites];
@@ -503,40 +494,5 @@ void addItem(struct inventory playerInventory, char itemName[], int quantity) {
 	strcpy(playerInventory.items[size].name, itemName);
 	playerInventory.items[size].quantity = quantity;
 	playerInventory.size += 1;
-}
-
-void init_textures() {
-	TEXTURES[0] = load_texture_from_file("tex/sword.bmf");
-	TEXTURES[1] = load_texture_from_file("tex/evil.bmf");
-}
-
-struct Texture load_texture_from_file(char* filename) {
-	FILE* fp;
-	int x, y;
-	struct Texture tex;
-
-	fp = fopen(filename, "r");
-
-	for (y = 0; y < 16; ++y) {
-		tex.bits[y] = 0;
-		char buffer[16];
-		fscanf(fp, "%s", buffer);
-		for (x = 0; x < 16; ++x) {
-			if (buffer[x] == '1') {
-				tex.bits[y] |= (1 << x);
-			}
-		}
-	}
-
-	return tex;
-}
-
-char get_texture_char_at(struct Texture texture, int x, int y) {
-	if (texture.bits[y] & (1 << x)) {
-		return '@';
-	}
-	else {
-		return ' ';
-	}
 }
 
