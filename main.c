@@ -614,13 +614,28 @@ int canMoveTo(int map[][MAP_HEIGHT], double x, double y) {
 
 //move forward until you collide, :-D
 void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY) {
+	// this lava visibility is just a crappy hack so that you
+	// don't collide with the lava, but it will still get rendered.
+	
+	SPRITES[LAVA_TEXID].visible = 0;
+	SPRITES[LAVA_TEXID+1].visible = 0;
+	SPRITES[LAVA_TEXID+2].visible = 0;
 	while (canMoveTo(map, *posX + dirX * MOVESPEED, *posY + dirY * MOVESPEED)) {
 		*posX += dirX * MOVESPEED;
 		*posY += dirY * MOVESPEED;
 
+		SPRITES[LAVA_TEXID].visible = 1;
+		SPRITES[LAVA_TEXID+1].visible = 1;
+		SPRITES[LAVA_TEXID+2].visible = 1;
+
 		render_screen(map, *posX, *posY, dirX, dirY, planeX, planeY, 0);
 
 		sleep_ms(100);
-
+		SPRITES[LAVA_TEXID].visible = 0;
+		SPRITES[LAVA_TEXID+1].visible = 0;
+		SPRITES[LAVA_TEXID+2].visible = 0;
 	}
+	SPRITES[LAVA_TEXID].visible = 1;
+	SPRITES[LAVA_TEXID+1].visible = 1;
+	SPRITES[LAVA_TEXID+2].visible = 1;
 }
