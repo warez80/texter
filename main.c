@@ -84,6 +84,9 @@ int SPRITE_VISIBLE[numSprites];
 int GAME_WON;
 
 int main() {
+	char done[20];
+	printf("Adjust your terminal size, then type 'done'.\n");
+	scanf("%s", done);
 	calculateScreenSize();
 
 	printf("Loading textures...\n");
