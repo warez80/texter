@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include "textures.h"
+#include "items.h"
 
 #define PI 3.1415926536
 
@@ -56,18 +57,6 @@ void sleep_ms(int milliseconds) {
 #define VIEW_TOP_DOWN 1
 
 #define WALL 219
-
-struct item {
-	char name[25];
-	int quantity;
-	int goldVal;
-};
-
-struct inventory {
-	struct item items[MAXINVENTORY];
-	int size;
-	int gold;
-};
 
 struct room {
 	char desc[200];
