@@ -45,8 +45,8 @@ void sleep_ms(int milliseconds) {
 #endif
 }
 
-#define START_X 13
-#define START_Y 21
+#define START_X 2
+#define START_Y 2
 
 #define ROTSPEED PI/2
 #define MOVESPEED 1
@@ -84,8 +84,8 @@ int main() {
 	init_textures();
 	printf("Loaded textures.\n");
 
-	init_sprite(&SPRITES[6], 6, 1.5, 20.5);
-	init_sprite(&SPRITES[5], 5, 7.5, 11.5);
+	init_sprite(&SPRITES[6], 6, 2.5, 9.5);
+	init_sprite(&SPRITES[5], 5, 7.5, 10.5);
 
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
@@ -113,6 +113,18 @@ int main() {
 
 	planeX = 0;
 	planeY = 0.66;
+	
+	oldDirX = dirX;
+	dirX = dirX * cos(-ROTSPEED) - dirY * sin(-ROTSPEED);
+	dirY = oldDirX * sin(-ROTSPEED) + dirY * cos(-ROTSPEED);
+	oldPlaneX = planeX;
+	planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
+	planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
+
+	cardinalDir--;
+	if(cardinalDir < 0) {
+		cardinalDir = 3;
+	}
 
 
 
@@ -126,7 +138,7 @@ int main() {
 	int viewMode = 0;
 	int shouldRenderNextFrame = 1;
 
-	cardinalDir = 3;
+	cardinalDir = 2;
 
 	while (1) {
 		if (strcmp(input, "quit") == 0) {
@@ -211,7 +223,6 @@ int main() {
 		} else {
 			shouldRenderNextFrame = 1;
 		}
-
 		scanf("%s", input);
 
 	}
