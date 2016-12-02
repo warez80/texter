@@ -78,7 +78,7 @@ void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
 int canMoveTo(int map[][MAP_HEIGHT], double x, double y);
 void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY);
 
-#define numSprites 2
+#define numSprites 10
 struct Sprite SPRITES[numSprites];
 int SPRITE_VISIBLE[numSprites];
 
@@ -86,8 +86,8 @@ int main() {
 	calculateScreenSize();
 	init_textures();
 
-	init_sprite(&SPRITES[0], 0, 19.5, 6.5);
-	init_sprite(&SPRITES[1], 1, 20.5, 8.5);
+	init_sprite(&SPRITES[6], 6, 21, 1);
+	init_sprite(&SPRITES[5], 5, 16, 6);
 
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
