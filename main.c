@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include "textures.h"
+#include "items.h"
 
 #define PI 3.1415926536
 
@@ -55,17 +56,6 @@ void sleep_ms(int milliseconds) {
 #define VIEW_FIRST_PERSON 0
 #define VIEW_TOP_DOWN 1
 
-struct item {
-	char name[25];
-	int quantity;
-	int goldVal;
-};
-
-struct inventory {
-	struct item items[MAXINVENTORY];
-	int size;
-	int gold;
-};
 
 struct room {
 	char desc[200];
@@ -84,8 +74,6 @@ struct Sprite {
 void fill_map(int map[][MAP_HEIGHT]);
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect);
-int hasItem(struct inventory, char itemName[]);
-void addItem(struct inventory, char itemName[], int quantity);
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
 
 #define numSprites 2
@@ -105,19 +93,11 @@ int main() {
 	int cardinalDir;
 
 	struct inventory playerInventory;
-	playerInventory.size = 0;
+	playerInventory.amt = 0;
 
 	int map[MAP_WIDTH][MAP_HEIGHT];
 
-	struct inventory shop1;
-	shop1.items[0].name[0] = 'k';
-	shop1.items[0].name[1] = 'e';
-	shop1.items[0].name[2] = 'y';
-	shop1.items[0].name[3] = 0;
-	shop1.items[0].quantity = 1;
-	shop1.items[0].goldVal = 5;
-	shop1.size = 1;
-	shop1.gold = 0;
+	struct inventory shop1 = {{"key",1,5}, 1, 0};
 
 
 	fill_map(map);
@@ -477,28 +457,3 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 	free(buffer);
 
 }
-
-int hasItem(struct inventory playerInventory, char itemName[]) {
-	int i, size = playerInventory.size;
-	for(i = 0; i < size; i++) {
-		if(strcmp(playerInventory.items[i].name, itemName) == 0) {
-			return playerInventory.items[i].quantity;
-		}
-	}
-
-	return 0;
-}
-
-void addItem(struct inventory playerInventory, char itemName[], int quantity) {
-	int i, size = playerInventory.size;
-	for(i = 0; i < size; i++) {
-		if(strcmp(playerInventory.items[i].name, itemName) == 0) {
-			playerInventory.items[i].quantity += quantity;
-			return;
-		}
-	}
-	strcpy(playerInventory.items[size].name, itemName);
-	playerInventory.items[size].quantity = quantity;
-	playerInventory.size += 1;
-}
-
