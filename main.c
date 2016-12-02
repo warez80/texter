@@ -73,6 +73,7 @@ void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
 int canMoveTo(int map[][MAP_HEIGHT], double x, double y);
 void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY);
 void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int* cardinalDir);
+int getSpriteFacing(double posX, double posY, double dirX, double dirY);
 
 #define numSprites 10
 struct Sprite SPRITES[numSprites];
@@ -84,6 +85,15 @@ int main() {
 	printf("Loading textures...\n");
 	init_textures();
 	printf("Loaded textures.\n");
+
+	// initialize sprite memory
+	{
+		int i;
+		for (i = 0; i < numSprites; ++i) {
+			SPRITES[i].visible = 0;
+		}
+	}
+
 
 	init_sprite(&SPRITES[SWORD_TEXID], SWORD_TEXID, 5.5, 22.5);
 	init_sprite(&SPRITES[EVIL_TEXID], EVIL_TEXID, 10.5, 6.5);
@@ -249,6 +259,30 @@ void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int*
 	*cardinalDir += 2;
 	*cardinalDir %= 4;
 }
+
+int getSpriteFacing(double posX, double posY, double dirX, double dirY) {
+	double projectX, projectY;
+	int i;
+	projectX = posX + dirX * MOVESPEED;
+	projectY = posY + dirY * MOVESPEED;
+
+	for (i = 0; i < numSprites; ++i) {
+		double dx, dy;
+		if (!SPRITES[i].visible) continue;
+
+		dx = projectX - SPRITES[i].x;
+		dy = projectY - SPRITES[i].y;
+
+		if (dx < 0) dx = -dx;
+		if (dy < 0) dy = -dy;
+
+		if (dx < 0.001 && dy < 0.001) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y) {
 	sprite->textureId = textureId;
