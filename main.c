@@ -255,7 +255,7 @@ void init_sprite(struct Sprite* sprite, int textureId, double x, double y) {
 	sprite->x = x;
 	sprite->y = y;
 	// sprites are invisible by default
-	sprite->visible = 0;
+	sprite->visible = 1;
 }
 
 void load_map(int map[][MAP_HEIGHT], char* mapfile) {
