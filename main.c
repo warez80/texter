@@ -55,8 +55,6 @@ void sleep_ms(int milliseconds) {
 #define VIEW_FIRST_PERSON 0
 #define VIEW_TOP_DOWN 1
 
-#define WALL 219
-
 struct item {
 	char name[25];
 	int quantity;
@@ -111,7 +109,15 @@ int main() {
 
 	int map[MAP_WIDTH][MAP_HEIGHT];
 
-	struct inventory shop1 = {{"key",1,5}, 1, 0};
+	struct inventory shop1;
+	shop1.items[0].name[0] = 'k';
+	shop1.items[0].name[1] = 'e';
+	shop1.items[0].name[2] = 'y';
+	shop1.items[0].name[3] = 0;
+	shop1.items[0].quantity = 1;
+	shop1.items[0].goldVal = 5;
+	shop1.size = 1;
+	shop1.gold = 0;
 
 
 	fill_map(map);
@@ -377,8 +383,8 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 		switch (map[mapX][mapY]) {
 			case 0: outColor = ' '; break;
 			case 1:
-				if (side) outColor = (char)WALL;
-				else outColor = (char)WALL;
+				if (side) outColor = '#';
+				else outColor = '%';
 				break;
 		}
 
@@ -447,7 +453,7 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 					texY = ((d * 16) / spriteSize) / 256;
 					// the 15 - part is to fix an issue with mirroring
 					color = get_texture_char_at(TEXTURES[SPRITES[i].textureId], 15 - texX, texY);
-					if (color != ' ') buffer[stripe*SCREEN_HEIGHT+y] = color;
+					if (color != 0) buffer[stripe*SCREEN_HEIGHT+y] = color;
 				}
 			}
 		}

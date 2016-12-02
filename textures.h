@@ -2,12 +2,11 @@
 #ifndef _TEXTURES_H_
 #define _TEXTURES_H_
 
-// Textures are 16x16 bit maps
 struct Texture {
-	int bits[16];
+	int vals[16][16];
 };
 
-struct Texture TEXTURES[2];
+struct Texture TEXTURES[4];
 
 void init_textures();
 
