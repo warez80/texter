@@ -243,6 +243,7 @@ int main() {
 		} else {
 			shouldRenderNextFrame = 1;
 		}
+
 		scanf("%s", input);
 
 	}
@@ -420,6 +421,7 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 	int x, i, j;
 	char* buffer = (char*) malloc(sizeof(int) * SCREEN_WIDTH * SCREEN_HEIGHT);
 	double* zBuffer = (double*) malloc(sizeof(double) * SCREEN_WIDTH);
+	struct Sprite temp_sprites[numSprites];
 
 	for (i = 0; i < SCREEN_WIDTH; ++i) {
 		for (j = 0; j < SCREEN_HEIGHT; ++j) {
@@ -510,25 +512,31 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 		zBuffer[x] = perpWallDist;
 	}
 
+	
 	for (i = 0; i < numSprites; ++i) {
 		double dx, dy;
+		temp_sprites[i].textureId = SPRITES[i].textureId;
+		temp_sprites[i].x = SPRITES[i].x;
+		temp_sprites[i].y = SPRITES[i].y;
+		temp_sprites[i].visible = SPRITES[i].visible;
+
 		dx = SPRITES[i].x - posX;
 		dy = SPRITES[i].y - posY;
-		SPRITES[i].dist = dx*dx + dy*dy;
+		temp_sprites[i].dist = dx*dx + dy*dy;
 	}
 
-	qsort(SPRITES, numSprites, sizeof(struct Sprite), cmp_sprite_dist);
+	qsort(temp_sprites, numSprites, sizeof(struct Sprite), cmp_sprite_dist);
 
 	for (i = 0; i < numSprites; ++i) {
 		double spriteX, spriteY, invDet, transformX, transformY;
 		int spriteScreenX, spriteSize, drawStartY, drawEndY, drawStartX, drawEndX, stripe;
 
-		if (!SPRITES[i].visible) {
+		if (!temp_sprites[i].visible) {
 			continue;
 		}
 
-		spriteX = SPRITES[i].x - posX;
-		spriteY = SPRITES[i].y - posY;
+		spriteX = temp_sprites[i].x - posX;
+		spriteY = temp_sprites[i].y - posY;
 
 		invDet = 1.0 / (planeX * dirY - dirX * planeY);
 
@@ -564,7 +572,7 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 					d = y * 256 - SCREEN_HEIGHT * 128 + spriteSize * 128;
 					texY = ((d * 16) / spriteSize) / 256;
 					// the 15 - part is to fix an issue with mirroring
-					color = get_texture_char_at(TEXTURES[SPRITES[i].textureId], 15 - texX, texY);
+					color = get_texture_char_at(TEXTURES[temp_sprites[i].textureId], 15 - texX, texY);
 					if (color != 0) buffer[stripe*SCREEN_HEIGHT+y] = color;
 				}
 			}
