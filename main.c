@@ -237,6 +237,8 @@ int main() {
 			shouldRenderNextFrame = 0;
 		} else if (strcmp(input, "grapple") == 0) {
 			grapple(map, &posX, &posY, dirX, dirY, planeX, planeY);
+		} else if (strcmp(input, "i") == 0) {
+			shouldRenderNextFrame &= interact(posX, posY, dirX, dirY);
 		}
 
 		if (shouldRenderNextFrame) {
