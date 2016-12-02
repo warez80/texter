@@ -76,7 +76,7 @@ void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, dou
 void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int* cardinalDir);
 int getSpriteFacing(double posX, double posY, double dirX, double dirY);
 
-#define numSprites 10
+#define numSprites 11
 struct Sprite SPRITES[numSprites];
 int SPRITE_VISIBLE[numSprites];
 
@@ -267,21 +267,18 @@ int interact(double posX, double posY, double dirX, double dirY) {
 				break;
 			case DOOR_TEXID: 
 				// open door if we got the key from the happy merchant
-				printf("you open the door\n");
 				SPRITES[DOOR_TEXID].visible = 0;
-				break;
+				return 1;
 			case SHOP_TEXID: 
 				// bring up shop
 				printf("ey, buy something will ya\n");
 				break;
 			case MONSTER_TEXID: 
 				// kill it if we have the sword
-				printf("you killed it in one hit\n");
 				SPRITES[MONSTER_TEXID].visible = 0;
-				break;
+				return 1;
 			case WEB_TEXID: 
 				// burn it if we have the torch
-				printf("KILL IT WITH FIRE\n");
 				SPRITES[WEB_TEXID].visible = 0;
 				return 1;
 			case TORCH_TEXID: 
@@ -297,8 +294,8 @@ int interact(double posX, double posY, double dirX, double dirY) {
 		}
 	} else {
 		printf("There's nothing there! D:\n");
-		return 0;
 	}
+	return 0;
 }
 
 void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int* cardinalDir) {
