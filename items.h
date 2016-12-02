@@ -23,6 +23,9 @@ struct item torch = {"torch", 1 , 2};
 struct item key = {"key", 1, 5};
 struct item grappler = {"grapple", 1, 10};
 
+	//initialize player inv
+struct inventory playerInventory = {0,0,0};
+
 struct inventory shop1 = {{{"key",1,5}},1,0};
 
 int itemIndex(struct inventory* i, char itemName[]);
