@@ -94,7 +94,7 @@ int main() {
 	int cardinalDir;
 
 	struct inventory playerInventory;
-	playerInventory.size = 0;
+	playerInventory.amt = 0;
 
 	int map[MAP_WIDTH][MAP_HEIGHT];
 
