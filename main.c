@@ -266,7 +266,7 @@ int interact(double posX, double posY, double dirX, double dirY) {
 				break;
 			case DOOR_TEXID: 
 				// open door if we got the key from the happy merchant
-				if(playerInventory.items[TORCH_TEXID].name == "key"){
+				if(strcmp(playerInventory.items[TORCH_TEXID].name, "key") == 0){
 					SPRITES[DOOR_TEXID].visible = 0;
 					return 1;
 				}
@@ -278,7 +278,7 @@ int interact(double posX, double posY, double dirX, double dirY) {
 				printf("ey, buy something will ya\n");
 				break;
 			case MONSTER_TEXID: 
-				if(playerInventory.items[SWORD_TEXID].name == "sword"){
+				if(strcmp(playerInventory.items[SWORD_TEXID].name, "sword") == 0){
 					SPRITES[MONSTER_TEXID].visible = 0;
 					return 1;
 				}
@@ -286,7 +286,7 @@ int interact(double posX, double posY, double dirX, double dirY) {
 					printf("wow, you're bad at this");
 				break;
 			case WEB_TEXID: 
-				if(playerInventory.items[TORCH_TEXID].name == "torch"){
+				if(strcmp(playerInventory.items[TORCH_TEXID].name, "torch") == 0){
 					SPRITES[WEB_TEXID].visible = 0;
 					return 1;
 				}
