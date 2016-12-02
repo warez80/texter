@@ -71,6 +71,7 @@ void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect);
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
 int canMoveTo(int map[][MAP_HEIGHT], double x, double y);
+int interact(double posX, double posY, double dirX, double dirY);
 void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY);
 void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int* cardinalDir);
 int getSpriteFacing(double posX, double posY, double dirX, double dirY);
@@ -130,7 +131,7 @@ int main() {
 
 	planeX = 0;
 	planeY = 0.66;
-	
+
 	oldDirX = dirX;
 	dirX = dirX * cos(-ROTSPEED) - dirY * sin(-ROTSPEED);
 	dirY = oldDirX * sin(-ROTSPEED) + dirY * cos(-ROTSPEED);
@@ -248,6 +249,48 @@ int main() {
 	return 0;
 }
 
+// returns whether the next frame should be rendered.
+int interact(double posX, double posY, double dirX, double dirY) {
+	int facing = getSpriteFacing(posX, posY, dirX, dirY);
+	if (facing != -1) {
+		int texFacing = SPRITES[facing].textureId;
+		switch (texFacing) {
+			case SWORD_TEXID: 
+				// put sword in inventory
+				printf("You got a sword!!! :OOO\n");
+				break;
+			case CHEST_TEXID: 
+				// put gold in inventory
+				printf("You found gold in the chest!~!~! O: :O O: :D\n");
+				break;
+			case DOOR_TEXID: 
+				// open door if we got the key from the happy merchant
+				printf("\n");
+				break;
+			case SHOP_TEXID: 
+				// bring up shop
+				printf("\n");
+				break;
+			case MONSTER_TEXID: 
+				// kill it if we have the sword
+				printf("\n");
+				break;
+			case WEB_TEXID: 
+				// burn it if we have the torch
+				return 1;
+			case TORCH_TEXID: 
+				// put torch in inventory
+				break;
+			case GRAPPLE_TEXID: 
+				// put grappling hook in inventory
+				break;
+		}
+	} else {
+		printf("There's nothing there! D:\n");
+		return 0;
+	}
+}
+
 void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int* cardinalDir) {
 	double oldDirX, oldPlaneX;
 	oldDirX = *dirX;
@@ -256,7 +299,7 @@ void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int*
 	oldPlaneX = *planeX;
 	*planeX = oldPlaneX * cos(PI) - *planeY * sin(PI);
 	*planeY = oldPlaneX * sin(PI) + *planeY * cos(PI);
-	
+
 	*cardinalDir += 2;
 	*cardinalDir %= 4;
 }
@@ -562,7 +605,7 @@ void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, dou
 	while (canMoveTo(map, *posX + dirX * MOVESPEED, *posY + dirY * MOVESPEED)) {
 		*posX += dirX * MOVESPEED;
 		*posY += dirY * MOVESPEED;
-		
+
 		render_screen(map, *posX, *posY, dirX, dirY, planeX, planeY, 0);
 
 		sleep_ms(100);
