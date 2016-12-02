@@ -310,8 +310,10 @@ int interact(double posX, double posY, double dirX, double dirY) {
 			case SHOP_TEXID:
 				// bring up shop
 				printf("ey, buy something will ya\n");
-				if(playerInventory.gold >= 5)
+				if(playerInventory.gold >= 5) {
 					playerInventory.items[SHOP_TEXID] = key;
+					printf("you bought a key\n");
+				}
 				break;
 			case MONSTER_TEXID:
 				if(strcmp(playerInventory.items[SWORD_TEXID].name, "sword") == 0){
