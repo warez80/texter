@@ -6,7 +6,7 @@ struct Texture {
 	int vals[16][16];
 };
 
-struct Texture TEXTURES[4];
+struct Texture TEXTURES[5];
 
 void init_textures();
 

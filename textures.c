@@ -6,6 +6,7 @@ void init_textures() {
 	TEXTURES[1] = load_texture_from_file("tex/evil.bmf");
 	TEXTURES[2] = load_texture_from_file("tex/door.bmf");
 	TEXTURES[3] = load_texture_from_file("tex/shop.bmf");
+	TEXTURES[4] = load_texture_from_file("tex/monster.bmf");
 }
 
 struct Texture load_texture_from_file(char* filename) {
