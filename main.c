@@ -75,10 +75,13 @@ int interact(double posX, double posY, double dirX, double dirY);
 void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY);
 void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int* cardinalDir);
 int getSpriteFacing(double posX, double posY, double dirX, double dirY);
+void win();
 
 #define numSprites 11
 struct Sprite SPRITES[numSprites];
 int SPRITE_VISIBLE[numSprites];
+
+int GAME_WON;
 
 int main() {
 	calculateScreenSize();
@@ -86,6 +89,8 @@ int main() {
 	printf("Loading textures...\n");
 	init_textures();
 	printf("Loaded textures.\n");
+
+	GAME_WON = 0;
 
 	// initialize sprite memory
 	{
@@ -224,10 +229,15 @@ int main() {
 			// make sure the next frame doesn't get rendered so the user can
 			// see the output.
 			shouldRenderNextFrame = 0;
-		} else if (strcmp(input, "grapple") == 0) {
+		} else if (strcmp(input, "grapple") == 0 && strcmp(playerInventory.items[GRAPPLE_TEXID].name, "grapple") == 0){
 			grapple(map, &posX, &posY, dirX, dirY, planeX, planeY);
 		} else if (strcmp(input, "i") == 0) {
 			shouldRenderNextFrame &= interact(posX, posY, dirX, dirY);
+		}
+
+		if (GAME_WON) {
+			win();
+			break;
 		}
 
 		if (shouldRenderNextFrame) {
@@ -244,6 +254,23 @@ int main() {
 
 	}
 	return 0;
+}
+
+void win() {
+	printf("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
+	printf("|                                                                                               |\n");
+	printf("| Y     Y   OOOOO   U     U           W     W  IIIIIII  N     N   ###  ###  ###  ###  ###  ###  |\n");
+	printf("| Y     Y  O     O  U     U           W     W     I     NN    N   ###  ###  ###  ###  ###  ###  |\n");
+	printf("| Y     Y  O     O  U     U           W     W     I     N N   N   ###  ###  ###  ###  ###  ###  |\n");
+	printf("|  Y   Y   O     O  U     U           W     W     I     N N   N   ###  ###  ###  ###  ###  ###  |\n");
+	printf("|   YYY    O     O  U     U           W  W  W     I     N  N  N   ###  ###  ###  ###  ###  ###  |\n");
+	printf("|    Y     O     O  U     U           W  W  W     I     N   N N   ###  ###  ###  ###  ###  ###  |\n");
+	printf("|    Y     O     O  U     U           W  W  W     I     N   N N                                 |\n");
+	printf("|    Y     O     O  U     U           W  W  W     I     N    NN   ###  ###  ###  ###  ###  ###  |\n");
+	printf("|    Y      OOOOO    UUUUU             WW WW   IIIIIII  N     N   ###  ###  ###  ###  ###  ###  |\n");
+	printf("|                                                                                               |\n");
+	printf("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
+
 }
 
 // returns whether the next frame should be rendered.
@@ -309,6 +336,9 @@ int interact(double posX, double posY, double dirX, double dirY) {
 				printf("You found your grandmother's grappling hook\n");
 				playerInventory.items[GRAPPLE_TEXID] = grappler;
 				SPRITES[GRAPPLE_TEXID].visible = 0;
+				break;
+			case LAVA_TEXID:
+				printf("lava is hot, oww :'(\n");
 				break;
 		}
 	} else {
