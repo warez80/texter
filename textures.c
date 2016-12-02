@@ -28,6 +28,8 @@ struct Texture load_texture_from_file(char* filename) {
 		}
 	}
 
+	fclose(fp);
+
 	return tex;
 }
 
