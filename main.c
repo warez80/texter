@@ -72,6 +72,7 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
 int canMoveTo(int map[][MAP_HEIGHT], double x, double y);
 void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY);
+void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int* cardinalDir);
 
 #define numSprites 10
 struct Sprite SPRITES[numSprites];
@@ -216,6 +217,19 @@ int main() {
 
 	}
 	return 0;
+}
+
+void turnAround(double* dirX, double* dirY, double* planeX, double* planeY, int* cardinalDir) {
+	double oldDirX, oldPlaneX;
+	oldDirX = *dirX;
+	*dirX = oldDirX * cos(PI) - *dirY * sin(PI);
+	*dirY = oldDirX * sin(PI) + *dirY * cos(PI);
+	oldPlaneX = *planeX;
+	*planeX = oldPlaneX * cos(PI) - *planeY * sin(PI);
+	*planeY = oldPlaneX * sin(PI) + *planeY * cos(PI);
+	
+	*cardinalDir += 2;
+	*cardinalDir %= 4;
 }
 
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y) {
