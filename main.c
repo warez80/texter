@@ -95,7 +95,7 @@ int main() {
 		}
 	}
 
-
+	//initializes sprites across the map
 	init_sprite(&SPRITES[SWORD_TEXID], SWORD_TEXID, 5.5, 22.5);
 	init_sprite(&SPRITES[CHEST_TEXID], CHEST_TEXID, 10.5, 6.5);
 	init_sprite(&SPRITES[DOOR_TEXID], DOOR_TEXID, 15.5, 17.5);
@@ -104,17 +104,22 @@ int main() {
 	init_sprite(&SPRITES[WEB_TEXID], WEB_TEXID, 4.5, 9.5);
 	init_sprite(&SPRITES[TORCH_TEXID], TORCH_TEXID, 2.5, 10.5);
 	init_sprite(&SPRITES[GRAPPLE_TEXID], GRAPPLE_TEXID, 16.5, 14.5);
-
+	init_sprite(&SPRITES[LAVA0_TEXID], LAVA0_TEXID, 5.5, 19.5);
+	init_sprite(&SPRITES[LAVA1_TEXID], LAVA0_TEXID, 5.5, 18.5);
+	init_sprite(&SPRITES[LAVA2_TEXID], LAVA0_TEXID, 5.5, 17.5);
+	
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
 	int i;
 	int cardinalDir;
-
+	
+	//initialize player inv
 	struct inventory playerInventory;
 	playerInventory.amt = 0;
-
+	
 	int map[MAP_WIDTH][MAP_HEIGHT];
 
+	//initialize shopkeeper's inv
 	struct inventory shop1 = {{"key",1,5}, 1, 0};
 
 	printf("Loading map...\n");
@@ -336,6 +341,7 @@ void init_sprite(struct Sprite* sprite, int textureId, double x, double y) {
 	sprite->visible = 1;
 }
 
+//reads map from file
 void load_map(int map[][MAP_HEIGHT], char* mapfile) {
 	FILE* fp;
 	int x, y, num_sprites, i;
@@ -359,6 +365,7 @@ void load_map(int map[][MAP_HEIGHT], char* mapfile) {
 	fclose(fp);
 }
 
+//prints out map
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir) {
 	int i, j;
 	char player;
@@ -374,7 +381,8 @@ void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir
 		}
 		buffer[j][MAP_WIDTH] = 0;
 	}
-
+	
+	//shows direction player is facing
 	switch (cardinalDir) {
 		case 0: player = '^'; break;
 		case 1: player = '>'; break;
@@ -580,6 +588,7 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 
 }
 
+//check legitimacy of movements
 int canMoveTo(int map[][MAP_HEIGHT], double x, double y) {
 	if (map[(int) x][(int) y] == 0) {
 		int i;
@@ -601,6 +610,7 @@ int canMoveTo(int map[][MAP_HEIGHT], double x, double y) {
 	return 0;
 }
 
+//move forward until you collide, :-D
 void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY) {
 	while (canMoveTo(map, *posX + dirX * MOVESPEED, *posY + dirY * MOVESPEED)) {
 		*posX += dirX * MOVESPEED;

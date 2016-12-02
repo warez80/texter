@@ -10,6 +10,9 @@ void init_textures() {
 	TEXTURES[WEB_TEXID] = load_texture_from_file("tex/web.bmf");
 	TEXTURES[TORCH_TEXID] = load_texture_from_file("tex/torch.bmf");
 	TEXTURES[GRAPPLE_TEXID] = load_texture_from_file("tex/grapple.bmf");
+	TEXTURES[LAVA0_TEXID] = load_texture_from_file("tex/lava.bmf");
+	TEXTURES[LAVA1_TEXID] = load_texture_from_file("tex/lava.bmf");
+	TEXTURES[LAVA2_TEXID] = load_texture_from_file("tex/lava.bmf");
 }
 
 struct Texture load_texture_from_file(char* filename) {
