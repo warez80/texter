@@ -223,8 +223,12 @@ int main() {
 			printf("=-=-=-=-=-=-=-=\n\n");
 			printf("f: move forward\n");
 			printf("l/r: turn left/right\n");
+			printf("s: turn around\n");
+			printf("g: look around\n");
 			printf("m: check map\n");
 			printf("v: toggle view mode\n");
+			printf("i: interact\n");
+			printf("grapple: (only usable with a grappling hook)\n");
 			printf("quit: exit the game\n");
 			printf("\n");
 
