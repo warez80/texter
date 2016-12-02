@@ -26,6 +26,7 @@ int itemIndex(struct inventory* i, char itemName[]);
 int quantityItem(struct inventory* i, char itemName[]);
 void addItem(struct inventory* i, char itemName[], int quantity);
 void removeItem(struct inventory* i, char itemName[], int quantity);
-void buyItem(struct inventory* shopInventory, struct inventory* playerInventory, struct item item);
+int buyItem(struct inventory* shopInventory, struct inventory* playerInventory, struct item item);
+void shopMenu(struct inventory* shopInventory, struct inventory* playerInventory);
 
 #endif
