@@ -265,31 +265,41 @@ int interact(double posX, double posY, double dirX, double dirY) {
 			case SWORD_TEXID: 
 				// put sword in inventory
 				printf("You got a sword!!! :OOO\n");
+				SPRITES[SWORD_TEXID].visible = 0;
 				break;
 			case CHEST_TEXID: 
 				// put gold in inventory
 				printf("You found gold in the chest!~!~! O: :O O: :D\n");
+				SPRITES[CHEST_TEXID].visible = 0;
 				break;
 			case DOOR_TEXID: 
 				// open door if we got the key from the happy merchant
-				printf("\n");
+				printf("you open the door\n");
+				SPRITES[DOOR_TEXID].visible = 0;
 				break;
 			case SHOP_TEXID: 
 				// bring up shop
-				printf("\n");
+				printf("ey, buy something will ya\n");
 				break;
 			case MONSTER_TEXID: 
 				// kill it if we have the sword
-				printf("\n");
+				printf("you killed it in one hit\n");
+				SPRITES[MONSTER_TEXID].visible = 0;
 				break;
 			case WEB_TEXID: 
 				// burn it if we have the torch
+				printf("KILL IT WITH FIRE\n");
+				SPRITES[WEB_TEXID].visible = 0;
 				return 1;
 			case TORCH_TEXID: 
 				// put torch in inventory
+				printf("You got the worst torch in the world, it's almost dead...\n");
+				SPRITES[TORCH_TEXID].visible = 0;
 				break;
 			case GRAPPLE_TEXID: 
 				// put grappling hook in inventory
+				printf("You found your grandmother's grappling hook\n");
+				SPRITES[GRAPPLE_TEXID].visible = 0;
 				break;
 		}
 	} else {
