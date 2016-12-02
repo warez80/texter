@@ -57,11 +57,6 @@ void sleep_ms(int milliseconds) {
 #define VIEW_TOP_DOWN 1
 
 
-struct room {
-	char desc[200];
-	int map[MAP_WIDTH][MAP_HEIGHT];
-};
-
 struct Sprite {
 	int textureId;
 	double x, y;
@@ -71,7 +66,7 @@ struct Sprite {
 	double dist;
 };
 
-void fill_map(int map[][MAP_HEIGHT]);
+void load_map(int map[][MAP_HEIGHT], char* mapfile);
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect);
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
@@ -102,7 +97,7 @@ int main() {
 	struct inventory shop1 = {{"key",1,5}, 1, 0};
 
 
-	fill_map(map);
+	load_map(map, "maps/map1.bmp");
 
 	posX = START_X + .5;
 	posY = START_Y + .5;
@@ -221,37 +216,31 @@ void init_sprite(struct Sprite* sprite, int textureId, double x, double y) {
 	sprite->textureId = textureId;
 	sprite->x = x;
 	sprite->y = y;
-	// sprites are visible by default
-	sprite->visible = 1;
+	// sprites are invisible by default
+	sprite->visible = 0;
 }
 
-void fill_map(int map[][MAP_HEIGHT]) {
-	int x, y;
+void load_map(int map[][MAP_HEIGHT], char* mapfile) {
+	FILE* fp;
+	int x, y, num_sprites, i;
+	fp = fopen(mapfile, "r");
 
-	// zero out the map
-	for (x = 0; x < MAP_WIDTH; ++x) {
-		for (y = 0; y < MAP_HEIGHT; ++y) {
-			map[x][y] = 0;
-		}
-	}
-
-	// create map boundaries
-	for (x = 0; x < MAP_WIDTH; ++x) {
-		map[x][0] = 1;
-		map[x][MAP_HEIGHT - 1] = 1;
-	}
 	for (y = 0; y < MAP_HEIGHT; ++y) {
-		map[0][y] = 1;
-		map[MAP_WIDTH - 1][y] = 1;
-	}
-
-	// TODO: generate the actual map here
-
-	for (x = 0; x < MAP_HEIGHT; ++x) {
-		if (x < MAP_WIDTH && x % 3 == 0) {
-			map[x][x] = 1;
+		char buffer[24];
+		fscanf(fp, "%s", buffer);
+		for (x = 0; x < MAP_WIDTH; ++x) {
+			map[x][y] = buffer[x] - '0';
 		}
 	}
+
+	fscanf(fp, "%d", &num_sprites);
+	for (i = 0; i < num_sprites; ++i) {
+		int spr;
+		fscanf(fp, "%d", &spr);
+		SPRITES[spr].visible = 1;
+	}
+
+	fclose(fp);
 }
 
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir) {
