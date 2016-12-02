@@ -285,19 +285,19 @@ int interact(double posX, double posY, double dirX, double dirY) {
 	if (facing != -1) {
 		int texFacing = SPRITES[facing].textureId;
 		switch (texFacing) {
-			case SWORD_TEXID: 
+			case SWORD_TEXID:
 				// put sword in inventory
 				printf("You got a sword!!! :OOO\n");
 				playerInventory.items[SWORD_TEXID] = sword;
 				SPRITES[SWORD_TEXID].visible = 0;
 				break;
-			case CHEST_TEXID: 
+			case CHEST_TEXID:
 				// put gold in inventory
 				printf("You found gold in the chest!~!~! O: :O O: :D\n");
 				SPRITES[CHEST_TEXID].visible = 0;
 				playerInventory.gold += 5;
 				break;
-			case DOOR_TEXID: 
+			case DOOR_TEXID:
 				// open door if we got the key from the happy merchant
 				if(strcmp(playerInventory.items[SHOP_TEXID].name, "key") == 0){
 					SPRITES[DOOR_TEXID].visible = 0;
@@ -307,37 +307,37 @@ int interact(double posX, double posY, double dirX, double dirY) {
 				else
 					printf("do you know how to use a door?\n");
 				break;
-			case SHOP_TEXID: 
+			case SHOP_TEXID:
 				// bring up shop
 				printf("ey, buy something will ya\n");
 				if(playerInventory.gold >= 5)
 					playerInventory.items[SHOP_TEXID] = key;
 				break;
-			case MONSTER_TEXID: 
+			case MONSTER_TEXID:
 				if(strcmp(playerInventory.items[SWORD_TEXID].name, "sword") == 0){
 					SPRITES[MONSTER_TEXID].visible = 0;
 					printf("you hit it, it died, idk what else you want \n");
 					GAME_WON = 1;
 				}
 				else
-					printf("wow, you're bad at this\n");
+					printf("wow, you're killing things\n");
 				break;
-			case WEB_TEXID: 
+			case WEB_TEXID:
 				if(strcmp(playerInventory.items[TORCH_TEXID].name, "torch") == 0){
 					SPRITES[WEB_TEXID].visible = 0;
 					//printf("KILL IT WITH FIRE\n");
 					return 1;
 				}
 				else
-					printf("you just remembered you're deathly afraid of spiders\n"); 
+					printf("you just remembered you're deathly afraid of spiders?\n");
 				break;
-			case TORCH_TEXID: 
+			case TORCH_TEXID:
 				// put torch in inventory
-				printf("You got the worst torch in the world, it's almost dead...\n");
+				printf("You got the worst torch in the world, reminds you of yourself\n");
 				playerInventory.items[TORCH_TEXID] = torch;
 				SPRITES[TORCH_TEXID].visible = 0;
 				break;
-			case GRAPPLE_TEXID: 
+			case GRAPPLE_TEXID:
 				// put grappling hook in inventory
 				printf("You found your grandmother's grappling hook\n");
 				playerInventory.items[GRAPPLE_TEXID] = grappler;
