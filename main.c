@@ -75,8 +75,6 @@ struct Sprite {
 void fill_map(int map[][MAP_HEIGHT]);
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect);
-int hasItem(struct inventory, char itemName[]);
-void addItem(struct inventory, char itemName[], int quantity);
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
 
 #define numSprites 2
@@ -96,7 +94,7 @@ int main() {
 	int cardinalDir;
 
 	struct inventory playerInventory;
-	playerInventory.size = 0;
+	playerInventory.amt = 0;
 
 	int map[MAP_WIDTH][MAP_HEIGHT];
 
