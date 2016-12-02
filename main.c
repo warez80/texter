@@ -146,8 +146,10 @@ int main() {
 			break;
 		} else if (strcmp(input, "f") == 0) {
 			// forward
-			if (canMoveTo(map, posX + dirX * MOVESPEED, posY)) posX += dirX * MOVESPEED;
-			if (canMoveTo(map, posX, posY + dirY * MOVESPEED)) posY += dirY * MOVESPEED;
+			if (canMoveTo(map, posX + dirX * MOVESPEED, posY + dirY * MOVESPEED)) {
+				posX += dirX * MOVESPEED;
+				posY += dirY * MOVESPEED;
+			}
 		} else if (strcmp(input, "r") == 0) {
 			// rotate right
 			oldDirX = dirX;
