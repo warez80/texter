@@ -107,12 +107,12 @@ int main() {
 	init_sprite(&SPRITES[LAVA_TEXID], LAVA_TEXID, 5.5, 19.5);
 	init_sprite(&SPRITES[LAVA_TEXID+1], LAVA_TEXID, 5.5, 18.5);
 	init_sprite(&SPRITES[LAVA_TEXID+2], LAVA_TEXID, 5.5, 17.5);
-	
+
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
 	int i;
 	int cardinalDir;
-	
+
 	int map[MAP_WIDTH][MAP_HEIGHT];
 
 	//initialize shopkeeper's inv
@@ -267,36 +267,32 @@ int interact(double posX, double posY, double dirX, double dirY) {
 			case DOOR_TEXID: 
 				// open door if we got the key from the happy merchant
 				if(playerInventory.items[TORCH_TEXID].name == "key"){
-					printf("you open the door\n");
 					SPRITES[DOOR_TEXID].visible = 0;
+					return 1;
 				}
 				else
-				printf("do you know how to use a door?");
+					printf("do you know how to use a door?");
 				break;
-				SPRITES[DOOR_TEXID].visible = 0;
-				return 1;
 			case SHOP_TEXID: 
 				// bring up shop
 				printf("ey, buy something will ya\n");
 				break;
 			case MONSTER_TEXID: 
 				if(playerInventory.items[SWORD_TEXID].name == "sword"){
-				printf("you killed it in one hit\n");
-				SPRITES[MONSTER_TEXID].visible = 0;
+					SPRITES[MONSTER_TEXID].visible = 0;
+					return 1;
 				}
 				else
-				printf("wow, you're bad at this");
+					printf("wow, you're bad at this");
 				break;
 			case WEB_TEXID: 
 				if(playerInventory.items[TORCH_TEXID].name == "torch"){
-					printf("KILL IT WITH FIRE\n");
 					SPRITES[WEB_TEXID].visible = 0;
+					return 1;
 				}
 				else
-				printf("you just remembered you're deathly afraid of spiders"); 
-				// burn it if we have the torch
-				SPRITES[WEB_TEXID].visible = 0;
-				return 1;
+					printf("you just remembered you're deathly afraid of spiders"); 
+				break;
 			case TORCH_TEXID: 
 				// put torch in inventory
 				printf("You got the worst torch in the world, it's almost dead...\n");
@@ -401,7 +397,7 @@ void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir
 		}
 		buffer[j][MAP_WIDTH] = 0;
 	}
-	
+
 	//shows direction player is facing
 	switch (cardinalDir) {
 		case 0: player = '^'; break;
@@ -529,7 +525,7 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 		zBuffer[x] = perpWallDist;
 	}
 
-	
+
 	for (i = 0; i < numSprites; ++i) {
 		double dx, dy;
 		temp_sprites[i].textureId = SPRITES[i].textureId;
@@ -641,7 +637,7 @@ int canMoveTo(int map[][MAP_HEIGHT], double x, double y) {
 void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY) {
 	// this lava visibility is just a crappy hack so that you
 	// don't collide with the lava, but it will still get rendered.
-	
+
 	SPRITES[LAVA_TEXID].visible = 0;
 	SPRITES[LAVA_TEXID+1].visible = 0;
 	SPRITES[LAVA_TEXID+2].visible = 0;
