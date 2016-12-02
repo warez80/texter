@@ -251,24 +251,37 @@ void load_map(int map[][MAP_HEIGHT], char* mapfile) {
 
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir) {
 	int i, j;
-	char out;
+	char player;
+	char buffer[MAP_HEIGHT][MAP_WIDTH+1];
 	for (j = 0; j < MAP_HEIGHT; ++j) {
 		for (i = 0; i < MAP_WIDTH; ++i) {
+			char out;
 			switch (map[i][j]) {
 				case 0: out = ' '; break;
 				case 1: out = '#'; break;
 			}
-			if (((int) posX) == i && ((int) posY) == j) {
-				switch (cardinalDir) {
-					case 0: out = '^'; break;
-					case 1: out = '>'; break;
-					case 2: out = 'v'; break;
-					case 3: out = '<'; break;
-				}
-			}
-			printf("%c", out);
+			buffer[j][i] = out;
 		}
-		printf("\n");
+		buffer[j][MAP_WIDTH] = 0;
+	}
+
+	switch (cardinalDir) {
+		case 0: player = '^'; break;
+		case 1: player = '>'; break;
+		case 2: player = 'v'; break;
+		case 3: player = '<'; break;
+	}
+
+	buffer[(int) posY][(int) posX] = player;
+
+	for (i = 0; i < numSprites; ++i) {
+		if (SPRITES[i].visible) {
+			buffer[(int) SPRITES[i].y][(int) SPRITES[i].x] = 'o';
+		}
+	}
+
+	for (j = 0; j < MAP_HEIGHT; ++j) {
+		printf("%s\n", buffer[j]);
 	}
 }
 
