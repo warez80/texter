@@ -81,8 +81,8 @@ int main() {
 	calculateScreenSize();
 	init_textures();
 
-	init_sprite(&SPRITES[6], 6, 21, 1);
-	init_sprite(&SPRITES[5], 5, 16, 6);
+	init_sprite(&SPRITES[6], 6, 1, 21);
+	init_sprite(&SPRITES[5], 5, 7, 12);
 
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
