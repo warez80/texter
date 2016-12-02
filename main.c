@@ -75,6 +75,7 @@ void fill_map(int map[][MAP_HEIGHT]);
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect);
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
+int canMoveTo(int x, int y);
 
 #define numSprites 2
 struct Sprite SPRITES[numSprites];
@@ -130,8 +131,8 @@ int main() {
 			break;
 		} else if (strcmp(input, "f") == 0) {
 			// forward
-			if (map[(int) (posX + dirX * MOVESPEED)][(int) posY] == 0) posX += dirX * MOVESPEED;
-			if (map[(int) posX][(int) (posY + dirY * MOVESPEED)] == 0) posY += dirY * MOVESPEED;
+			if (canMoveTo(map, posX + dirX * MOVESPEED, posY)) posX += dirX * MOVESPEED;
+			if (canMoveTo(map, posX, posY + dirY * MOVESPEED)) posY += dirY * MOVESPEED;
 		} else if (strcmp(input, "r") == 0) {
 			// rotate right
 			oldDirX = dirX;
@@ -456,4 +457,25 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 	free(str);
 	free(buffer);
 
+}
+
+int canMoveTo(int[][MAP_HEIGHT] map, double x, double y) {
+	if (map[(int) x][(int) y] == 0) {
+		int i;
+		for (i = 0; i < numSprites; ++i) {
+			if (SPRITES[i].visible) {
+				// check for x-y collisions
+				double dx, dy;
+				dx = SPRITES[i].x - x;
+				dy = SPRITES[i].y - y;
+				if (dx < 0) dx = -dx;
+				if (dy < 0) dy = -dy;
+				if (dx < 0.001 && dy < 0.001) {
+					return 0;
+				}
+			}
+		}
+		return 1;
+	}
+	return 0;
 }
