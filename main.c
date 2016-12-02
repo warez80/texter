@@ -45,8 +45,8 @@ void sleep_ms(int milliseconds) {
 #endif
 }
 
-#define START_X 18
-#define START_Y 5
+#define START_X 13
+#define START_Y 21
 
 #define ROTSPEED PI/2
 #define MOVESPEED 1
@@ -79,7 +79,10 @@ int SPRITE_VISIBLE[numSprites];
 
 int main() {
 	calculateScreenSize();
+
+	printf("Loading textures...\n");
 	init_textures();
+	printf("Loaded textures.\n");
 
 	init_sprite(&SPRITES[6], 6, 21, 1);
 	init_sprite(&SPRITES[5], 5, 16, 6);
@@ -96,8 +99,11 @@ int main() {
 
 	struct inventory shop1 = {{"key",1,5}, 1, 0};
 
+	printf("Loading map...\n");
 
-	load_map(map, "maps/map1.bmp");
+	load_map(map, "map/map1.bmp");
+
+	printf("Map loaded.\n");
 
 	posX = START_X + .5;
 	posY = START_Y + .5;
