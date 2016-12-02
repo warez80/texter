@@ -266,7 +266,6 @@ int interact(double posX, double posY, double dirX, double dirY) {
 				break;
 			case DOOR_TEXID: 
 				// open door if we got the key from the happy merchant
-<<<<<<< HEAD
 				if(playerInventory.items[TORCH_TEXID].name == "key"){
 					printf("you open the door\n");
 					SPRITES[DOOR_TEXID].visible = 0;
@@ -274,16 +273,13 @@ int interact(double posX, double posY, double dirX, double dirY) {
 				else
 				printf("do you know how to use a door?");
 				break;
-=======
 				SPRITES[DOOR_TEXID].visible = 0;
 				return 1;
->>>>>>> origin/master
 			case SHOP_TEXID: 
 				// bring up shop
 				printf("ey, buy something will ya\n");
 				break;
 			case MONSTER_TEXID: 
-<<<<<<< HEAD
 				if(playerInventory.items[SWORD_TEXID].name == "sword"){
 				printf("you killed it in one hit\n");
 				SPRITES[MONSTER_TEXID].visible = 0;
@@ -297,15 +293,9 @@ int interact(double posX, double posY, double dirX, double dirY) {
 					SPRITES[WEB_TEXID].visible = 0;
 				}
 				else
-				printf("you just remembered you're deathly afraid of spiders");
-=======
-				// kill it if we have the sword
-				SPRITES[MONSTER_TEXID].visible = 0;
-				return 1;
-			case WEB_TEXID: 
+				printf("you just remembered you're deathly afraid of spiders"); 
 				// burn it if we have the torch
 				SPRITES[WEB_TEXID].visible = 0;
->>>>>>> origin/master
 				return 1;
 			case TORCH_TEXID: 
 				// put torch in inventory
