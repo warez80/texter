@@ -75,7 +75,8 @@ void fill_map(int map[][MAP_HEIGHT]);
 void render_map(int map[][MAP_HEIGHT], double posX, double posY, int cardinalDir);
 void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX, double dirY, double planeX, double planeY, int fisheyeEffect);
 void init_sprite(struct Sprite* sprite, int textureId, double x, double y);
-int canMoveTo(int x, int y);
+int canMoveTo(int map[][MAP_HEIGHT], double x, double y);
+void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY);
 
 #define numSprites 2
 struct Sprite SPRITES[numSprites];
@@ -196,6 +197,8 @@ int main() {
 			// make sure the next frame doesn't get rendered so the user can
 			// see the output.
 			shouldRenderNextFrame = 0;
+		} else if (strcmp(input, "grapple") == 0) {
+			grapple(map, &posX, &posY, dirX, dirY, planeX, planeY);
 		}
 
 		if (shouldRenderNextFrame) {
@@ -459,7 +462,7 @@ void render_screen(int map[][MAP_HEIGHT], double posX, double posY, double dirX,
 
 }
 
-int canMoveTo(int[][MAP_HEIGHT] map, double x, double y) {
+int canMoveTo(int map[][MAP_HEIGHT], double x, double y) {
 	if (map[(int) x][(int) y] == 0) {
 		int i;
 		for (i = 0; i < numSprites; ++i) {
@@ -478,4 +481,16 @@ int canMoveTo(int[][MAP_HEIGHT] map, double x, double y) {
 		return 1;
 	}
 	return 0;
+}
+
+void grapple(int map[][MAP_HEIGHT], double* posX, double* posY, double dirX, double dirY, double planeX, double planeY) {
+	while (canMoveTo(map, *posX + dirX * MOVESPEED, *posY + dirY * MOVESPEED)) {
+		*posX += dirX * MOVESPEED;
+		*posY += dirY * MOVESPEED;
+		
+		render_screen(map, *posX, *posY, dirX, dirY, planeX, planeY, 0);
+
+		sleep_ms(100);
+
+	}
 }
