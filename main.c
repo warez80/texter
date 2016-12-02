@@ -104,9 +104,9 @@ int main() {
 	init_sprite(&SPRITES[WEB_TEXID], WEB_TEXID, 4.5, 9.5);
 	init_sprite(&SPRITES[TORCH_TEXID], TORCH_TEXID, 2.5, 10.5);
 	init_sprite(&SPRITES[GRAPPLE_TEXID], GRAPPLE_TEXID, 16.5, 14.5);
-	init_sprite(&SPRITES[LAVA0_TEXID], LAVA0_TEXID, 5.5, 19.5);
-	init_sprite(&SPRITES[LAVA1_TEXID], LAVA0_TEXID, 5.5, 18.5);
-	init_sprite(&SPRITES[LAVA2_TEXID], LAVA0_TEXID, 5.5, 17.5);
+	init_sprite(&SPRITES[LAVA_TEXID], LAVA_TEXID, 5.5, 19.5);
+	init_sprite(&SPRITES[LAVA_TEXID+1], LAVA_TEXID, 5.5, 18.5);
+	init_sprite(&SPRITES[LAVA_TEXID+2], LAVA_TEXID, 5.5, 17.5);
 	
 	char input[255];
 	double posX, posY, dirX, dirY, planeX, planeY, oldDirX, oldPlaneX;
