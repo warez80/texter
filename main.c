@@ -101,7 +101,7 @@ int main() {
 
 	printf("Loading map...\n");
 
-	load_map(map, "map/map1.bmp");
+	load_map(map, "map/map1.bmf");
 
 	printf("Map loaded.\n");
 
