@@ -19,13 +19,11 @@ struct Texture load_texture_from_file(char* filename) {
 		char buffer[16];
 		fscanf(fp, "%s", buffer);
 		for (x = 0; x < 16; ++x) {
-			printf("buffer[%d]: %c: %d\n", x, buffer[x], buffer[x]);
 			if (48 <= buffer[x] && buffer[x] <= 58) {
 				tex.vals[x][y] = buffer[x] - '0';
 			} else {
 				tex.vals[x][y] = 0;
 			}
-			printf("vals[%d][%d] = %d\n", x, y, tex.vals[x][y]);
 		}
 	}
 
