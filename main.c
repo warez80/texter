@@ -144,13 +144,6 @@ int main() {
 	planeX = planeX * cos(-ROTSPEED) - planeY * sin(-ROTSPEED);
 	planeY = oldPlaneX * sin(-ROTSPEED) + planeY * cos(-ROTSPEED);
 
-	cardinalDir--;
-	if(cardinalDir < 0) {
-		cardinalDir = 3;
-	}
-
-
-
 	// use a fisheye effect to add a little disorientation
 	render_screen(map, posX, posY, dirX, dirY, planeX, planeY, 1);
 
