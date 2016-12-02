@@ -268,7 +268,7 @@ int interact(double posX, double posY, double dirX, double dirY) {
 				// open door if we got the key from the happy merchant
 				if(strcmp(playerInventory.items[SHOP_TEXID].name, "key") == 0){
 					SPRITES[DOOR_TEXID].visible = 0;
-					printf("you unlock the door, i'm proud of ya \n");
+					//printf("you unlock the door, i'm proud of ya \n");
 					return 1;
 				}
 				else
@@ -279,12 +279,11 @@ int interact(double posX, double posY, double dirX, double dirY) {
 				printf("ey, buy something will ya\n");
 				if(playerInventory.gold >= 5)
 					playerInventory.items[SHOP_TEXID] = key;
-					return 1;
 				break;
 			case MONSTER_TEXID: 
 				if(strcmp(playerInventory.items[SWORD_TEXID].name, "sword") == 0){
 					SPRITES[MONSTER_TEXID].visible = 0;
-					printf("you hit it, it died, idk what else you want \n");
+					//printf("you hit it, it died, idk what else you want \n");
 					return 1;
 				}
 				else
@@ -293,7 +292,7 @@ int interact(double posX, double posY, double dirX, double dirY) {
 			case WEB_TEXID: 
 				if(strcmp(playerInventory.items[TORCH_TEXID].name, "torch") == 0){
 					SPRITES[WEB_TEXID].visible = 0;
-					printf("KILL IT WITH FIRE\n");
+					//printf("KILL IT WITH FIRE\n");
 					return 1;
 				}
 				else
